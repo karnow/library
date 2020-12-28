@@ -10,13 +10,15 @@ type Query {
     authors: [Author!]!,
     users: [User!]!
 }
-type Book {
-    title: String!,
-    cover: Image!
-}
 type Author {
     name: String!,
-    photo: Image!
+    photo: Image!,
+    books: [Book]
+}
+type Book {
+    title: String!,
+    cover: Image!,
+    author: Author
 }
 type User {
     name: String!,
