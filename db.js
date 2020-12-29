@@ -205,16 +205,26 @@ const data ={
         color: "blue"
       }
     }
-  ]
+  ],
+  bookIdsByAuthorsIds: {
+    1: [1,2,3,4,5,6,7],
+    2: [8,9,10,11,12,13,14,15],
+    3: [16,17,18,19,20]
+  }
 
 }
+
+
+const getAuthorIdByBookId = bookId => parseInt(Object.entries(data.bookIdsByAuthorsIds).find(([authorId, bookIds]) => bookIds.includes(bookId))[0],10);
+console.log("Author of book #18:", getAuthorIdByBookId(18));
 
 //id = index +1
 const getBookById = id => ({
     ...data.books[id -1],
-    id
+    id,
+    authorId: getAuthorIdByBookId(id)
 });
-    const getAuthorById = (id) => ({...data.authors[id - 1], id});
+    const getAuthorById = (id) => ({...data.authors[id - 1], id, bookIds: data.bookIdsByAuthorsIds[id]});
     const getUserById = (id) => ({...data.users[id - 1], id});
 
 // const getBookById= (id) => data.books[id - 1];
