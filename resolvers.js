@@ -12,8 +12,9 @@ const resolvers = {
     
   },
   Author: {
-    name: parent => parent.name+parent.photoPath,
+    
     books: parent => parent.bookIds.map(db.getBookById),
+    
     photo: parent => ({
       path: parent.photoPath
     })
