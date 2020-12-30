@@ -1,14 +1,30 @@
 const db = require("./db");
+const BASE_ASSETS_URL = "http://examples.devmastery.pl/assets";
 
 const resolvers = {
   Book: {
     title: parent => parent.title.toUpperCase(),
     author: parent => db.getAuthorById(parent.authorId),
+    cover: parent => ({
+      path: parent.coverPath
+    })
     // author: parent => db.getAuthorById(1),
     
   },
   Author: {
-    books: parent => parent.bookIds.map(db.getBookById)
+    name: parent => parent.name+parent.photoPath,
+    books: parent => parent.bookIds.map(db.getBookById),
+    photo: parent => ({
+      path: parent.photoPath
+    })
+  },
+  Avatar: {
+    image: parent => ({
+      path: parent.imagePath
+    })
+  },
+  Image: {
+    url: parent => BASE_ASSETS_URL + parent.path
   },
   User: {
       
