@@ -3,7 +3,7 @@ const db = require("./db");
 
 
 // console.log("A book", db.getAllBooks());
-// console.log("A Author", db.getAuthorById(3));
+console.log("A Author", db.getAuthorById(3));
 // console.log("A book", db.getUserById(3));
 // const author = db.getAuthorById(2);
 // const books = author.bookIds.map(db.getBookById);
