@@ -1,44 +1,42 @@
 const db = require("./db");
 
 
+
 const resolvers = {
   Book: {
-    title: parent => parent.title.toUpperCase(),
-    author: parent => db.getAuthorById(parent.authorId),
-    cover: parent => ({
-      path: parent.coverPath
+    title: (book) => book.title.toUpperCase(),
+    author: (book, agrs, {db}) => db.getAuthorById(book.authorId),
+    cover: book => ({
+      path: book.coverPath
     })
     // author: parent => db.getAuthorById(1),
     
   },
   Author: {
     
-    books: parent => parent.bookIds.map(db.getBookById),
-    
-    photo: parent => ({
-      path: parent.photoPath
+    books: (author, agrs, {db}) => author.bookIds.map(db.getBookById),
+    photo:author => ({
+      path: author.photoPath
     })
   },
   Avatar: {
-    image: parent => ({
-      path: parent.imagePath
+    image: avatar => ({
+      path: avatar.imagePath
     })
   },
   Image: {
-    url: (parent,args, context) => context.assetsBaseUrl + parent.path
+    url: (image,args, context) => context.assetsBaseUrl + image.paquery
   },
   User: {
-      
-    email: parent => {
+    email: user => {
       console.log("Someone asks about an email.");
-      return parent.email;
+      return user.email;
     }
   },
   Query: {
-    users: parent => {
-      console.log("Query's parent", parent);
-      return parent.users;
-    }
+    books: (rootValue, agrs, {db}) =>db.getAllBooks(),
+    authors:(rootValue, agrs, {db}) => db.getAllAuthors(),
+    users:(rootValue, agrs, {db}) => db.getAllUsers()
   }
 };
 
