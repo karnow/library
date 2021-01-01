@@ -25,7 +25,7 @@ const resolvers = {
     })
   },
   Image: {
-    url: (image,args, context) => context.assetsBaseUrl + image.paquery
+    url: (image,args, context) => context.assetsBaseUrl + image.path
   },
   User: {
     email: user => {
