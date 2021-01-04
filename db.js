@@ -273,30 +273,47 @@ const data ={
     }
   ],
   bookIdsByAuthorsIds: {
-    1: [1,2,3,4,5,6,7],
-    2: [8,9,10,11,12,13,14,15],
-    3: [16,17,18,19,20]
+    "1": ["1","2","3","4","5","6","7"],
+    "2": ["8","9","10","11","12","13","14","15"],
+    "3": ["16","17","18","19","20"]
   }
 
 }
+const toIndex = id => parseInt(id, 10) -1;
+const toId = index => `${index + 1}`;
 
 
-const getAuthorIdByBookId = bookId => parseInt(Object.entries(data.bookIdsByAuthorsIds).find(([authorId, bookIds]) => bookIds.includes(bookId))[0],10);
-console.log("Author of book #18:", getAuthorIdByBookId(18));
+const getAuthorIdByBookId = bookId => Object.entries(data.bookIdsByAuthorsIds).find(([authorId, bookIds]) => bookIds.includes(bookId))[0];
+// console.log("Author of book #18:", getAuthorIdByBookId(18));
 
-//id = index +1
-const getBookById = id => ({
-    ...data.books[id -1],
-    id,
-    authorId: getAuthorIdByBookId(id)
-});
-    const getAuthorById = (id) => ({...data.authors[id - 1], id, bookIds: data.bookIdsByAuthorsIds[id]});
-    const getUserById = (id) => ({...data.users[id - 1], id});
+
+const getBookById = id => {
+  const index = toIndex(id);
+  if (index < 0 || index >= data.books.length) {
+    return null;
+  }
+  return ({...data.books[toIndex(id)], id, authorId: getAuthorIdByBookId(id)})
+};
+
+const getAuthorById = (id) =>{ 
+  const index = toIndex(id);
+  if (index < 0 || index >= data.authors.length) {
+    return null;
+  }
+return ({...data.authors[toIndex(id)], id, bookIds: data.bookIdsByAuthorsIds[id]})
+};
+const getUserById = (id) =>{
+  const index = toIndex(id);
+  if (index < 0 || index >= data.users.length) {
+    return null;
+  }
+  return ({...data.users[toIndex(id)], id})
+};
 
 // const getBookById= (id) => data.books[id - 1];
-const getAllBooks = () => data.books.map((book, index)=> getBookById (index+1));
-const getAllAuthors = () => data.authors.map((author, index)=> getAuthorById (index+1));
-const getAllUsers = () => data.users.map((user, index)=> getUserById (index+1));
+const getAllBooks = () => data.books.map((book, index)=> getBookById (toId(index)));
+const getAllAuthors = () => data.authors.map((author, index)=> getAuthorById (toId(index)));
+const getAllUsers = () => data.users.map((user, index)=> getUserById (toId(index)));
 
 
 
