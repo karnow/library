@@ -36,7 +36,10 @@ const resolvers = {
   Query: {
     books: (rootValue, agrs, {db}) =>db.getAllBooks(),
     authors:(rootValue, agrs, {db}) => db.getAllAuthors(),
-    users:(rootValue, agrs, {db}) => db.getAllUsers()
+    users:(rootValue, agrs, {db}) => db.getAllUsers(),
+    book:(rootValue,{id}, {db})=> db.getBookById(id),
+    author:(rootValue,{id}, {db})=> db.getAuthorById(id),
+    user:(rootValue,{id}, {db})=> db.getUserById(id)
   }
 };
 
