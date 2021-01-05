@@ -7,9 +7,11 @@ const toExternalId = dbId => Buffer.from(dbId).toString("base64");
 const resolvers = {
   Query: {
     books: (rootValue, { searchQuery }, { db, search }) =>
-      searchQuery.length > 0 ? search.findBooks(searchQuery) : db.getAllBooks(),
-    authors:(rootValue, agrs, {db}) => db.getAllAuthors(),
-    users:(rootValue, agrs, {db}) => db.getAllUsers(),
+    searchQuery.length > 0 ? search.findBooks(searchQuery) : db.getAllBooks(),
+    authors:(rootValue,{ searchQuery } , {db, search}) => 
+    searchQuery.length > 0 ? search.findAuthors(searchQuery) : db.getAllAuthors(),
+    users: (rootValue, { searchQuery }, { db, search }) => 
+    searchQuery.length > 0 ? search.findUsers(searchQuery) : db.getAllUsers(),
     book:(rootValue,{id}, {db})=> db.getBookById(todbId(id)),
     author:(rootValue,{id}, {db})=> db.getAuthorById(todbId(id)),
     user:(rootValue,{id}, {db})=> db.getUserById(todbId(id))
