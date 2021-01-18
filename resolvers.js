@@ -12,13 +12,24 @@ const toExternalId = (dbId, type) => encodeBase64(`${type}-${dbId}`);
 const toTypeAndDbId = externalId => decodeBase64(externalId).split("-", 2);
 const toDbId = externalId => toTypeAndDbId(externalId)[1];
 
+const getAnythingByExternalId = (externalId, db) => {
+  const [type, dbId] = toTypeAndDbId(externalId);
 
-// const nanoidConstruktor = (bookld) => {
-//   console.log(bookld);
-//    const tab = nanoid(5);
-//    return tab
-//   };
-
+  switch (type) {
+    case "Book": {
+      return db.getBookById(dbId);
+    }
+    case "Author": {
+      return db.getAuthorById(dbId);
+    }
+    case "User": {
+      return db.getUserById(dbId);
+    }
+    default: {
+      return null;
+    }
+  }
+}
 
 const resolvers = {
   Query: {
@@ -28,14 +39,15 @@ const resolvers = {
     searchQuery.length > 0 ? search.findAuthors(searchQuery) : db.getAllAuthors(),
     users: (rootValue, { searchQuery }, { db, search }) => 
     searchQuery.length > 0 ? search.findUsers(searchQuery) : db.getAllUsers(),
-    // book:(rootValue,{id}, {db})=> db.getBookById(id),
+    
     book:(rootValue,{id}, {db})=> db.getBookById(toDbId(id)),
     author:(rootValue,{id}, {db})=> db.getAuthorById(toDbId(id)),
-    user:(rootValue,{id}, {db})=> db.getUserById(toDbId(id))
+    user:(rootValue,{id}, {db})=> db.getUserById(toDbId(id)),
+    anything:(rootValue,{id}, {db})=> getAnythingByExternalId(id , db)
   },
 
   Book: {
-    // id: book =>nanoidConstruktor(book.id),
+    
     id: book => toExternalId(book.id, "Book"),
     title: (book) => book.title.toUpperCase(),
     author: (book, agrs, {db}) => db.getAuthorById(book.authorId),
@@ -71,6 +83,22 @@ const resolvers = {
       return user.email;
     }
   },
+
+  Anything: {
+    __resolveType: (anything) => {
+      if (anything.title) {
+        return "Book";
+      }
+      if (anything.bio) {
+        return "Author";
+      }
+      if (anything.info) {
+        return "User";
+      }
+      return null;
+
+    }
+  }
 };
 
 module.exports = resolvers;

@@ -11,8 +11,11 @@ type Query {
     users(searchQuery: String! = ""): [User!]!,
     book(id: ID!): Book,
     author(id: ID!): Author,
-    user(id: ID!): User
+    user(id: ID!): User,
+    anything(id: ID!): Anything
 }
+union Anything = Author | Book | User
+
 type Author {
     id: ID!,
     name: String!,
