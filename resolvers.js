@@ -31,6 +31,8 @@ const getAnythingByExternalId = (externalId, db) => {
   }
 }
 
+
+
 const resolvers = {
   Query: {
     books: (rootValue, { searchQuery }, { db, search }) =>
@@ -43,7 +45,12 @@ const resolvers = {
     book:(rootValue,{id}, {db})=> db.getBookById(toDbId(id)),
     author:(rootValue,{id}, {db})=> db.getAuthorById(toDbId(id)),
     user:(rootValue,{id}, {db})=> db.getUserById(toDbId(id)),
-    anything:(rootValue,{id}, {db})=> getAnythingByExternalId(id , db)
+    anything:(rootValue,{id}, {db})=> getAnythingByExternalId(id , db),
+    everything:(rootValue,agrs, {db})=> [
+      ...db.getAllAuthors(),
+      ...db.getAllUsers(),
+      ...db.getAllBooks()
+    ]
   },
 
   Book: {
@@ -84,6 +91,14 @@ const resolvers = {
     }
   },
 
+  // BookCopy: {
+  //   id: bookCopy => toExternalId(bookCopy.id, "BookCopy"),
+  //   book: (bookCopy, args, { db }) => db.getBookById(bookCopy.bookId),
+  //   owner: (bookCopy, args, { db }) => db.getUserById(bookCopy.ownerId),
+  //   borrower: (bookCopy, args, { db }) =>
+  //     bookCopy.borrowerId && db.getUserById(bookCopy.borrowerId)
+  // },
+
   Anything: {
     __resolveType: (anything) => {
       if (anything.title) {
@@ -98,7 +113,8 @@ const resolvers = {
       return null;
 
     }
-  }
+  },
+  
 };
 
 module.exports = resolvers;

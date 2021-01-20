@@ -314,7 +314,7 @@ const getUserById = (id) =>{
 const getAllBooks = () => data.books.map((book, index)=> getBookById (toId(index)));
 const getAllAuthors = () => data.authors.map((author, index)=> getAuthorById (toId(index)));
 const getAllUsers = () => data.users.map((user, index)=> getUserById (toId(index)));
-
+// const getALLDatabase =()=>{for(value of Object.values(data)){ console.log(value)} return value}
 
 
 const db = {
@@ -324,6 +324,7 @@ const db = {
  getAllBooks,
  getAllAuthors,
  getAllUsers,
+ 
  
 };
 

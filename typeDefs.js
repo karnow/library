@@ -12,9 +12,12 @@ type Query {
     book(id: ID!): Book,
     author(id: ID!): Author,
     user(id: ID!): User,
-    anything(id: ID!): Anything
+    anything(id: ID!): Anything,
+    everything:[Anything!]!
 }
+
 union Anything = Author | Book | User
+
 
 type Author {
     id: ID!,
