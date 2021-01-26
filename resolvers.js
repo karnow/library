@@ -64,9 +64,11 @@ const resolvers = {
     author: (book, agrs, {db}) => db.getAuthorById(book.authorId),
     cover: book => ({
       path: book.coverPath
-    })
-    // author: parent => db.getAuthorById(1),
-    
+    }),
+    copies: (book, agrs, {db}) =>
+    db.getBookCopiesByBookId(book.id)
+     
+     
   },
 
   Author: {

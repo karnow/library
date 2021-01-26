@@ -31,7 +31,8 @@ type Book {
     title: String!,
     cover: Image!,
     description: String!,
-    author: Author
+    author: Author,
+    copies: [BookCopy!]!
 }
 type User {
     id: ID!,

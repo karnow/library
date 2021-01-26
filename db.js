@@ -445,6 +445,9 @@ const getAllAuthors = () => data.authors.map((author, index)=> getAuthorById (to
 const getAllUsers = () => data.users.map((user, index)=> getUserById (toId(index)));
 // const getALLDatabase =()=>{for(value of Object.values(data)){ console.log(value)} return value}
 
+const getBookCopiesByBookId =(bookId) =>
+getAllBookCopies().filter(bookCopy =>bookCopy.bookId === bookId)
+
 
 const db = {
  getBookById,
@@ -454,7 +457,8 @@ const db = {
  getAllAuthors,
  getAllUsers,
  getBookCopyById,
- getAllBookCopies
+ getAllBookCopies,
+ getBookCopiesByBookId
  
  
 };
