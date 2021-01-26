@@ -16,7 +16,7 @@ type Query {
     everything:[Anything!]!
 }
 
-union Anything = Author | Book | User
+union Anything = Author | Book | User | BookCopy
 
 
 type Author {
@@ -46,6 +46,12 @@ type Image {
 type Avatar {
     image: Image!,
     color: String!
+}
+type BookCopy {
+    id: ID!,
+    owner: User!,
+    book: Book!,
+    borrower: User
 }
 
 `;

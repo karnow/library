@@ -25,6 +25,9 @@ const getAnythingByExternalId = (externalId, db) => {
     case "User": {
       return db.getUserById(dbId);
     }
+    case "BookCopy": {
+      return db.getBookCopyById(dbId);
+    }
     default: {
       return null;
     }
@@ -47,6 +50,7 @@ const resolvers = {
     user:(rootValue,{id}, {db})=> db.getUserById(toDbId(id)),
     anything:(rootValue,{id}, {db})=> getAnythingByExternalId(id , db),
     everything:(rootValue,agrs, {db})=> [
+      ...db.getAllBookCopies(),
       ...db.getAllAuthors(),
       ...db.getAllUsers(),
       ...db.getAllBooks()
@@ -91,13 +95,13 @@ const resolvers = {
     }
   },
 
-  // BookCopy: {
-  //   id: bookCopy => toExternalId(bookCopy.id, "BookCopy"),
-  //   book: (bookCopy, args, { db }) => db.getBookById(bookCopy.bookId),
-  //   owner: (bookCopy, args, { db }) => db.getUserById(bookCopy.ownerId),
-  //   borrower: (bookCopy, args, { db }) =>
-  //     bookCopy.borrowerId && db.getUserById(bookCopy.borrowerId)
-  // },
+  BookCopy: {
+    id: bookCopy => toExternalId(bookCopy.id, "BookCopy"),
+    book: (bookCopy, args, { db }) => db.getBookById(bookCopy.bookId),
+    owner: (bookCopy, args, { db }) => db.getUserById(bookCopy.ownerId),
+    borrower: (bookCopy, args, { db }) =>
+      bookCopy.borrowerId && db.getUserById(bookCopy.borrowerId)
+  },
 
   Anything: {
     __resolveType: (anything) => {
@@ -109,6 +113,9 @@ const resolvers = {
       }
       if (anything.info) {
         return "User";
+      }
+      if (anything.ownerId) {
+        return "BookCopy";
       }
       return null;
 
