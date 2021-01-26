@@ -39,7 +39,10 @@ type User {
     name: String!,
     email: String!
     info: String!,
-    avatar:Avatar!
+    avatar:Avatar!,
+    ownedBookCopies: [BookCopy!]!
+    borrowedBookCopies: [BookCopy!]!
+
 }
 type Image {
     url:String!

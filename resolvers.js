@@ -94,7 +94,10 @@ const resolvers = {
     email: user => {
       console.log("Someone asks about an email.");
       return user.email;
-    }
+    },
+    ownedBookCopies: (user, args, { db }) => db.getBookCopiesByOwnerId(user.id),
+    borrowedBookCopies: (user, args, { db }) =>
+      db.getBookCopiesByBorrowerId(user.id)
   },
 
   BookCopy: {

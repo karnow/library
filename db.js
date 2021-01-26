@@ -446,7 +446,11 @@ const getAllUsers = () => data.users.map((user, index)=> getUserById (toId(index
 // const getALLDatabase =()=>{for(value of Object.values(data)){ console.log(value)} return value}
 
 const getBookCopiesByBookId =(bookId) =>
-getAllBookCopies().filter(bookCopy =>bookCopy.bookId === bookId)
+getAllBookCopies().filter(bookCopy =>bookCopy.bookId === bookId);
+const getBookCopiesByOwnerId = ownerId =>
+  getAllBookCopies().filter(bookCopy => bookCopy.ownerId === ownerId);
+const getBookCopiesByBorrowerId = borrowerId =>
+  getAllBookCopies().filter(bookCopy => bookCopy.borrowerId === borrowerId);
 
 
 const db = {
@@ -458,8 +462,9 @@ const db = {
  getAllUsers,
  getBookCopyById,
  getAllBookCopies,
- getBookCopiesByBookId
- 
+ getBookCopiesByBookId,
+ getBookCopiesByOwnerId,
+ getBookCopiesByBorrowerId
  
 };
 
