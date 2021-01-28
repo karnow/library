@@ -11,6 +11,7 @@ const server = new ApolloServer({
      resolvers,
       context: {
           db,
+          currentUserDbId: "2",
           search: new Search(db),
           assetsBaseUrl: BASE_ASSETS_URL
       },

@@ -3,6 +3,7 @@ const { gql } = require("apollo-server");
 const typeDefs = gql`
 schema {
     query: Query 
+    mutation: Mutation
    
 }
 type Query {
@@ -15,7 +16,9 @@ type Query {
     anything(id: ID!): Anything,
     everything:[Anything!]!
 }
-
+type Mutation {
+    borrowBookCopy(id: ID!): BookCopy!
+}
 union Anything = Author | Book | User | BookCopy
 
 
