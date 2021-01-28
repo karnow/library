@@ -461,6 +461,9 @@ const borrowBookCopy = (bookCopyId, borrowerId) => {
   if (!!bookCopy.borrowerId) {
     throw new Error("Cannot borrow the book copy. It is already borrowed.")
   }
+  if (bookCopy.ownerId === borrowerId){
+    throw new Error("you cannot borrow your own book")
+  }
   bookCopy.borrowerId = borrowerId;
 }
 const db = {
