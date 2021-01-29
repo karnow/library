@@ -60,6 +60,10 @@ const resolvers = {
     borrowBookCopy: (rootValue, { id }, { db, currentUserDbId }) => {
       db.borrowBookCopy(toDbId(id), currentUserDbId);
       return db.getBookCopyById(toDbId(id));
+    },
+    returnBookCopy:(rootValue, {id}, {db, currentUserDbId}) => {
+      db.returnBookCopy(toDbId(id), currentUserDbId);
+      return db.getBookCopyById(toDbId(id));
     }
   },
 

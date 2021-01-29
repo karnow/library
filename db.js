@@ -466,6 +466,20 @@ const borrowBookCopy = (bookCopyId, borrowerId) => {
   }
   bookCopy.borrowerId = borrowerId;
 }
+const returnBookCopy = (bookCopyId, borrowerId) => {
+  const index = toIndex(bookCopyId);
+  if (index < 0 || index >= data.bookCopies.length) {
+    throw new Error("Could not find the book copy");
+  }
+  const bookCopy = data.bookCopies[index];
+  if (!bookCopy.borrowerId) {
+    throw new Error("Cannot return the book copy. It hasn't been borrowed.")
+  }
+  // if (bookCopy.ownerId === borrowerId){
+  //   throw new Error("you cannot borrow your own book")
+  // }
+  bookCopy.borrowerId = null;
+}
 const db = {
  getBookById,
  getAuthorById,
@@ -478,7 +492,8 @@ const db = {
  getBookCopiesByBookId,
  getBookCopiesByOwnerId,
  getBookCopiesByBorrowerId,
- borrowBookCopy
+ borrowBookCopy,
+ returnBookCopy
  
 };
 

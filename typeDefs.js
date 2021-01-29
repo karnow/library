@@ -18,6 +18,7 @@ type Query {
 }
 type Mutation {
     borrowBookCopy(id: ID!): BookCopy!
+    returnBookCopy(id: ID!): BookCopy!
 }
 union Anything = Author | Book | User | BookCopy
 
