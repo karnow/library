@@ -403,7 +403,7 @@ const data ={
 };
 const toIndex = id => parseInt(id, 10) -1;
 const toId = index => `${index + 1}`;
-
+ 
 
 const getAuthorIdByBookId = bookId => Object.entries(data.bookIdsByAuthorsIds).find(([authorId, bookIds]) => bookIds.includes(bookId))[0];
 // console.log("Author of book #18:", getAuthorIdByBookId(18));
@@ -433,6 +433,7 @@ const getUserById = (id) =>{
 };
 
 const getBookCopyById = id =>({
+  
   ...data.bookCopies[toIndex(id)], id
 });
 
@@ -465,7 +466,25 @@ const borrowBookCopy = (bookCopyId, borrowerId) => {
     throw new Error("you cannot borrow your own book")
   }
   bookCopy.borrowerId = borrowerId;
+  
 }
+
+
+const borrowRandomCopy = (borrowerdId) => {
+   
+  const index = data.bookCopies.findIndex((el,index)=>el.borrowerId=== null && el.ownerId !== borrowerdId);
+    
+    if (index === -1){
+      throw new Error ('All books are on loan')
+    }
+  const bookCopy = data.bookCopies[index];
+  bookCopy.borrowerId = borrowerdId;
+    const id = toId(index);
+    return id;
+     
+  }
+    
+  
 const returnBookCopy = (bookCopyId, borrowerId) => {
   const index = toIndex(bookCopyId);
   if (index < 0 || index >= data.bookCopies.length) {
@@ -493,7 +512,9 @@ const db = {
  getBookCopiesByOwnerId,
  getBookCopiesByBorrowerId,
  borrowBookCopy,
- returnBookCopy
+ returnBookCopy,
+ borrowRandomCopy
+ 
  
 };
 

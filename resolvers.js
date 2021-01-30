@@ -64,6 +64,11 @@ const resolvers = {
     returnBookCopy:(rootValue, {id}, {db, currentUserDbId}) => {
       db.returnBookCopy(toDbId(id), currentUserDbId);
       return db.getBookCopyById(toDbId(id));
+    },
+    borrowRandomBook:(rootValue, args, { db, currentUserDbId }) => {
+      const id = db.borrowRandomCopy(currentUserDbId);
+      console.log(id);
+      return db.getBookCopyById(id);
     }
   },
 
