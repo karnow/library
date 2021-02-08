@@ -34,6 +34,7 @@ const getAnythingByExternalId = (externalId, db) => {
   }
 }
 
+const id = resource => toExternalId(resource.id, resource.resourceType);
 
 
 const resolvers = {
@@ -81,7 +82,7 @@ const resolvers = {
 
   Book: {
     
-    id: book => toExternalId(book.id, "Book"),
+    id,
     title: (book) => book.title.toUpperCase(),
     author: (book, agrs, {db}) => db.getAuthorById(book.authorId),
     cover: book => ({
@@ -94,7 +95,7 @@ const resolvers = {
   },
 
   Author: {
-    id: author => toExternalId(author.id, "Author"),
+    id,
     books: (author, agrs, {db}) => author.bookIds.map(db.getBookById),
     photo:author => ({
       path: author.photoPath
@@ -112,7 +113,7 @@ const resolvers = {
   },
 
   User: {
-    id: user => toExternalId(user.id, "User"),
+    id,
     email: user => {
       console.log("Someone asks about an email.");
       return user.email;
@@ -123,7 +124,7 @@ const resolvers = {
   },
 
   BookCopy: {
-    id: bookCopy => toExternalId(bookCopy.id, "BookCopy"),
+    id,
     book: (bookCopy, args, { db }) => db.getBookById(bookCopy.bookId),
     owner: (bookCopy, args, { db }) => db.getUserById(bookCopy.ownerId),
     borrower: (bookCopy, args, { db }) =>
@@ -150,22 +151,8 @@ const resolvers = {
   },
 
   Resource: {
-    __resolveType: (resource) => {
-      if (resource.title) {
-        return "Book";
-      }
-      if (resource.bio) {
-        return "Author";
-      }
-      if (resource.info) {
-        return "User";
-      }
-      if (resource.ownerId) {
-        return "BookCopy";
-      }
-      return null;
-
-    }
+    __resolveType: resource => resource.resourceType
+        
   },
   
 };

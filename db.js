@@ -414,7 +414,12 @@ const getBookById = id => {
   if (index < 0 || index >= data.books.length) {
     return null;
   }
-  return ({...data.books[toIndex(id)], id, authorId: getAuthorIdByBookId(id)})
+  return ({
+    ...data.books[toIndex(id)],
+    id,
+    resourceType: "Book",
+    authorId: getAuthorIdByBookId(id)
+  })
 };
 
 const getAuthorById = (id) =>{ 
@@ -422,19 +427,30 @@ const getAuthorById = (id) =>{
   if (index < 0 || index >= data.authors.length) {
     return null;
   }
-return ({...data.authors[toIndex(id)], id, bookIds: data.bookIdsByAuthorsIds[id]})
+  return ({
+    ...data.authors[toIndex(id)],
+    id,
+    resourceType: "Author",
+    bookIds: data.bookIdsByAuthorsIds[id]
+  })
 };
 const getUserById = (id) =>{
   const index = toIndex(id);
   if (index < 0 || index >= data.users.length) {
     return null;
   }
-  return ({...data.users[toIndex(id)], id})
+  return ({
+    ...data.users[toIndex(id)],
+    resourceType: "User",
+    id
+  })
 };
 
 const getBookCopyById = id =>({
   
-  ...data.bookCopies[toIndex(id)], id
+  ...data.bookCopies[toIndex(id)],
+  resourceType: "BookCopy",
+  id
 });
 
 const getAllBookCopies = () => 
