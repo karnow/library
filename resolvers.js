@@ -54,7 +54,14 @@ const resolvers = {
       ...db.getAllAuthors(),
       ...db.getAllUsers(),
       ...db.getAllBooks()
-    ]
+    ],
+    resources:(rootValue,agrs, {db})=> [
+      ...db.getAllBookCopies(),
+      ...db.getAllAuthors(),
+      ...db.getAllUsers(),
+      ...db.getAllBooks()
+    ],
+    resource:(rootValue,{id}, {db})=> getAnythingByExternalId(id , db),
   },
   Mutation: {
     borrowBookCopy: (rootValue, { id }, { db, currentUserDbId }) => {
@@ -135,6 +142,25 @@ const resolvers = {
         return "User";
       }
       if (anything.ownerId) {
+        return "BookCopy";
+      }
+      return null;
+
+    }
+  },
+
+  Resource: {
+    __resolveType: (resource) => {
+      if (resource.title) {
+        return "Book";
+      }
+      if (resource.bio) {
+        return "Author";
+      }
+      if (resource.info) {
+        return "User";
+      }
+      if (resource.ownerId) {
         return "BookCopy";
       }
       return null;

@@ -14,7 +14,9 @@ type Query {
     author(id: ID!): Author,
     user(id: ID!): User,
     anything(id: ID!): Anything,
-    everything:[Anything!]!
+    everything:[Anything!]!,
+    resource(id: ID!): Resource,
+    resources:[Resource!]!
 }
 type Mutation {
     borrowBookCopy(id: ID!): BookCopy!
@@ -23,16 +25,19 @@ type Mutation {
     
 }
 union Anything = Author | Book | User | BookCopy
+interface Resource {
+    id: ID!
+}
 
 
-type Author {
+type Author implements Resource {
     id: ID!,
     name: String!,
     photo: Image!,
     bio: String!,
     books: [Book]
 }
-type Book {
+type Book implements Resource {
     id: ID!,
     title: String!,
     cover: Image!,
@@ -40,7 +45,7 @@ type Book {
     author: Author,
     copies: [BookCopy!]!
 }
-type User {
+type User implements Resource {
     id: ID!,
     name: String!,
     email: String!
@@ -57,7 +62,7 @@ type Avatar {
     image: Image!,
     color: String!
 }
-type BookCopy {
+type BookCopy implements Resource {
     id: ID!,
     owner: User!,
     book: Book!,
