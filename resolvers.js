@@ -67,7 +67,14 @@ const resolvers = {
       ...db.getAllUsers(),
       ...db.getAllBooks()
     ],
-    resource:(rootValue,{id}, {db})=> getResourceByExternalId(id , db),
+    resource: (rootValue, { id }, { db }) => getResourceByExternalId(id, db),
+
+    people:(rootValue,agrs, {db})=> [
+      
+      ...db.getAllAuthors(),
+      ...db.getAllUsers(),
+      
+    ],
   },
   Mutation: {
     borrowBookCopy: (rootValue, { id }, { db, currentUserDbId }) => {
@@ -159,7 +166,11 @@ const resolvers = {
     __resolveType: resource => resource.resourceType
         
   },
-  
+
+  Person: {
+    __resolveType: resource => resource.resourceType
+        
+  },
 };
 
 module.exports = resolvers;

@@ -16,7 +16,8 @@ type Query {
     anything(id: ID!): Anything,
     everything:[Anything!]!,
     resource(id: ID!): Resource,
-    resources:[Resource!]!
+    resources:[Resource!]!,
+    people:[Person!]!
 }
 type Mutation {
     borrowBookCopy(id: ID!): BookCopy!
@@ -25,12 +26,17 @@ type Mutation {
     
 }
 union Anything = Author | Book | User | BookCopy
+
 interface Resource {
     id: ID!
 }
 
+interface Person {
+    name: String!
+}
 
-type Author implements Resource {
+
+type Author implements Resource & Person {
     id: ID!,
     name: String!,
     photo: Image!,
@@ -45,7 +51,7 @@ type Book implements Resource {
     author: Author,
     copies: [BookCopy!]!
 }
-type User implements Resource {
+type User implements Resource & Person {
     id: ID!,
     name: String!,
     email: String!
