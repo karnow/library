@@ -515,6 +515,29 @@ const returnBookCopy = (bookCopyId, borrowerId) => {
   // }
   bookCopy.borrowerId = null;
 }
+
+
+const getResourceByIdAndType = (id, type) => {
+  switch (type) {
+    case "Book": {
+      return getBookById(id);
+    }
+    case "Author": {
+      return getAuthorById(id);
+    }
+    case "User": {
+      return getUserById(id);
+    }
+    case "BookCopy": {
+      return getBookCopyById(id);
+    }
+    default: {
+      return null;
+    }
+  }
+}
+
+
 const db = {
  getBookById,
  getAuthorById,
@@ -529,7 +552,8 @@ const db = {
  getBookCopiesByBorrowerId,
  borrowBookCopy,
  returnBookCopy,
- borrowRandomCopy
+ borrowRandomCopy,
+ getResourceByIdAndType
  
  
 };

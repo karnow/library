@@ -33,6 +33,11 @@ const getAnythingByExternalId = (externalId, db) => {
     }
   }
 }
+const getResourceByExternalId = (externalId, db) => {
+  const [type, dbId] = toTypeAndDbId(externalId);
+  return db.getResourceByIdAndType(dbId, type)
+  
+}
 
 const id = resource => toExternalId(resource.id, resource.resourceType);
 
@@ -62,7 +67,7 @@ const resolvers = {
       ...db.getAllUsers(),
       ...db.getAllBooks()
     ],
-    resource:(rootValue,{id}, {db})=> getAnythingByExternalId(id , db),
+    resource:(rootValue,{id}, {db})=> getResourceByExternalId(id , db),
   },
   Mutation: {
     borrowBookCopy: (rootValue, { id }, { db, currentUserDbId }) => {
