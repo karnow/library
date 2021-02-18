@@ -1,5 +1,5 @@
 const data ={
-  books: [
+  Book: [
     { id: "1",
       resourceType: "Book",
       authorId: "1",
@@ -250,7 +250,7 @@ const data ={
       And the world is still at war.`
     }
   ],
-  authors: [
+  Author: [
     {
       id: "1",
       resourceType: "Author",
@@ -299,7 +299,7 @@ const data ={
       The English translation of Sapkowski's novel Blood of Elves won the David Gemmell Legends Award in 2009.`
     }
   ],
-  users: [
+  User: [
     {
       id: "1",
       resourceType: "User",
@@ -345,12 +345,7 @@ const data ={
       }
     }
   ],
-  bookIdsByAuthorsIds: {
-    "1": ["1","2","3","4","5","6","7"],
-    "2": ["8","9","10","11","12","13","14","15"],
-    "3": ["16","17","18","19","20"]
-  },
-  bookCopies: [
+  BookCopy: [
     {
       id: "1",
       resourceType: "BookCopy",
@@ -522,56 +517,44 @@ const data ={
   ]
 
 };
-const toIndex = id => parseInt(id, 10) -1;
-const toId = index => `${index + 1}`;
- 
 
-const getAuthorIdByBookId = bookId => Object.entries(data.bookIdsByAuthorsIds).find(([authorId, bookIds]) => bookIds.includes(bookId))[0];
-// console.log("Author of book #18:", getAuthorIdByBookId(18));
-
-
-const getBookById = id => {
-  const index = toIndex(id);
-  if (index < 0 || index >= data.books.length) {
-    return null;
+//nisko poziomowe funkcje możemy jest traktować jako zapytania np sql
+function findResourceByIdAndType(id, resourceType) {
+  const resources = findAllResourcesByType(resourceType);
+  const resource = resources.find(resource => resource.id === id);
+  if (!resource) {
+    throw new Error(`Could not find resource by id '${id}`)
   }
-  return ({
-    ...data.books[toIndex(id)],
-  })
-};
+  return resource;
+}
 
-const getAuthorById = (id) =>{ 
-  const index = toIndex(id);
-  if (index < 0 || index >= data.authors.length) {
-    return null;
+function findAllResourcesByType(resourceType) {
+  const resources = data[resourceType];
+  if (!resources) {
+    throw new Error (`Unrecognized resource type '${resourceType}'`)
   }
-  return ({
-    ...data.authors[toIndex(id)]
-  })
-};
+  return resources;
+}
 
-const getUserById = (id) =>{
-  const index = toIndex(id);
-  if (index < 0 || index >= data.users.length) {
-    return null;
-  }
-  return ({
-    ...data.users[toIndex(id)],
-  })
-};
+function getAllResourcesByType(resourceType) {
+  return[...findAllResourcesByType(resourceType)]
 
-const getBookCopyById = id =>({
-  ...data.bookCopies[toIndex(id)]
-});
+}
+/////////////////////
+
+const getBookById = id => getResourceByIdAndType(id, "Book");
+const getAuthorById = (id) =>getResourceByIdAndType(id, "Author");
+const getUserById = (id) =>getResourceByIdAndType(id, "User");
+const getBookCopyById = id =>getResourceByIdAndType(id, "BookCopy");
 
 const getBooksByAuthorId = authorId =>
   getAllBooks().filter(book => book.authorId === authorId);
 
 
-const getAllBooks = () => data.books;
-const getAllAuthors = () => data.authors;
-const getAllUsers = () => data.users;
-const getAllBookCopies = () => data.bookCopies;
+const getAllBooks = () => getAllResourcesByType("Book");
+const getAllAuthors = () => getAllResourcesByType("Author");
+const getAllUsers = () => getAllResourcesByType("User");
+const getAllBookCopies = () => getAllResourcesByType("BookCopy");
 
 const getBookCopiesByBookId =(bookId) =>
 getAllBookCopies().filter(bookCopy =>bookCopy.bookId === bookId);
@@ -580,12 +563,9 @@ const getBookCopiesByOwnerId = ownerId =>
 const getBookCopiesByBorrowerId = borrowerId =>
   getAllBookCopies().filter(bookCopy => bookCopy.borrowerId === borrowerId);
 
+//mutation
 const borrowBookCopy = (bookCopyId, borrowerId) => {
-  const index = toIndex(bookCopyId);
-  if (index < 0 || index >= data.bookCopies.length) {
-    throw new Error("Could not find the book copy");
-  }
-  const bookCopy = data.bookCopies[index];
+  const bookCopy = findResourceByIdAndType(bookCopyId, "BookCopy");
   if (!!bookCopy.borrowerId) {
     throw new Error("Cannot borrow the book copy. It is already borrowed.")
   }
@@ -598,53 +578,42 @@ const borrowBookCopy = (bookCopyId, borrowerId) => {
 
 
 const borrowRandomCopy = (borrowerdId) => {
-   
-  const index = data.bookCopies.findIndex((el,index)=>el.borrowerId=== null && el.ownerId !== borrowerdId);
+  const BookCopy = getAllResourcesByType("BookCopy");
+  // const index = data.BookCopy.findIndex((el,index)=>el.borrowerId=== null && el.ownerId !== borrowerdId);
+  const index = BookCopy.findIndex((el,index)=>el.borrowerId=== null && el.ownerId !== borrowerdId);
     
     if (index === -1){
       throw new Error ('All books are on loan')
     }
-  const bookCopy = data.bookCopies[index];
+  const bookCopy = data.BookCopy[index];
   bookCopy.borrowerId = borrowerdId;
-    const id = toId(index);
-    return id;
+  // const toId = index => `${index + 1}`;
+    // const id = toId(index);
+    const id = `${index + 1}`; 
+    return id; 
      
   }
     
   
 const returnBookCopy = (bookCopyId, borrowerId) => {
-  const index = toIndex(bookCopyId);
-  if (index < 0 || index >= data.bookCopies.length) {
-    throw new Error("Could not find the book copy");
-  }
-  const bookCopy = data.bookCopies[index];
+  const bookCopy = findResourceByIdAndType(bookCopyId, "BookCopy")
   if (!bookCopy.borrowerId) {
     throw new Error("Cannot return the book copy. It hasn't been borrowed.")
   }
-  // if (bookCopy.ownerId === borrowerId){
-  //   throw new Error("you cannot borrow your own book")
-  // }
+  if (bookCopy.borrowerId !== borrowerId){
+     throw new Error("Book copy can only be returned by the user who borrowed it")
+  }
   bookCopy.borrowerId = null;
 }
 
 
 const getResourceByIdAndType = (id, type) => {
-  switch (type) {
-    case "Book": {
-      return getBookById(id);
-    }
-    case "Author": {
-      return getAuthorById(id);
-    }
-    case "User": {
-      return getUserById(id);
-    }
-    case "BookCopy": {
-      return getBookCopyById(id);
-    }
-    default: {
-      return null;
-    }
+  try {
+    return ({
+      ...findResourceByIdAndType(id, type)
+    })
+  } catch (error) {
+    return null;
   }
 }
 
