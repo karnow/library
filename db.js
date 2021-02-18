@@ -578,7 +578,7 @@ const borrowBookCopy = (bookCopyId, borrowerId) => {
 
 
 const borrowRandomCopy = (borrowerdId) => {
-  const BookCopy = getAllResourcesByType("BookCopy");
+  const BookCopy = getAllBookCopies();
   // const index = data.BookCopy.findIndex((el,index)=>el.borrowerId=== null && el.ownerId !== borrowerdId);
   const index = BookCopy.findIndex((el,index)=>el.borrowerId=== null && el.ownerId !== borrowerdId);
     
