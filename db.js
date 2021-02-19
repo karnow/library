@@ -540,6 +540,16 @@ function getAllResourcesByType(resourceType) {
   return[...findAllResourcesByType(resourceType)]
 
 }
+
+function deleteResource(id, resourceType) {
+  const resources = findAllResourcesByType(resourceType);
+  const index = resources.findIndex(resource => resource.id === id);
+  if (index < 0) {
+    throw new Error(`Could not find resource by id '${id}`);
+  }
+  resources.splice(index, 1);
+}
+
 /////////////////////
 
 const getBookById = id => getResourceByIdAndType(id, "Book");
@@ -617,15 +627,33 @@ const getResourceByIdAndType = (id, type) => {
   }
 }
 
+function deleteBookCopy(id) {
+  deleteResource(id, "BookCopy");
+    
+}
+
+function deleteUser(id) {
+  getBookCopiesByBorrowerId(id).forEach(bookCopy => returnBookCopy(bookCopy.id, id));
+  getBookCopiesByOwnerId(id).forEach(bookCopy => deleteBookCopy(bookCopy.id));
+  deleteResource(id, "User");
+}
+
+
 
 const db = {
- getBookById,
- getAuthorById,
- getUserById,
  getAllBooks,
+ getBookById,
+ 
  getAllAuthors,
+ getAuthorById,
+
  getAllUsers,
+ getUserById,
+ deleteUser,
+ 
+  
  getBooksByAuthorId,
+ 
  getBookCopyById,
  getAllBookCopies,
  getBookCopiesByBookId,
@@ -634,7 +662,10 @@ const db = {
  borrowBookCopy,
  returnBookCopy,
  borrowRandomCopy,
- getResourceByIdAndType
+ deleteBookCopy,
+ 
+ getResourceByIdAndType,
+ getAllResourcesByType
  
  
 };
