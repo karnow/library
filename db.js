@@ -442,7 +442,7 @@ const data ={
       resourceType: "BookCopy",
       ownerId: "3",
       borrowerId: "2",
-      bookId: "12"
+      bookId: "12" 
     },
     {
       id: "15",
@@ -638,14 +638,25 @@ function deleteUser(id) {
   deleteResource(id, "User");
 }
 
+function deleteBook(id) {
+  getBookCopiesByBookId(id).forEach(bookCopy => deleteBookCopy(bookCopy.id));
+  deleteResource(id, "Book");
+}
+function deleteAuthor(id) {
+  getBooksByAuthorId(id).forEach(book => deleteBook(book.id));
+  deleteResource(id, "Author");
+  
+ }
 
 
 const db = {
  getAllBooks,
  getBookById,
+ deleteBook,
  
  getAllAuthors,
  getAuthorById,
+ deleteAuthor,
 
  getAllUsers,
  getUserById,
