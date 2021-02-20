@@ -550,6 +550,21 @@ function deleteResource(id, resourceType) {
   resources.splice(index, 1);
 }
 
+function updateResource(id, resourceType, resourceData) {
+   const resources = findAllResourcesByType(resourceType);
+  const index = resources.findIndex(resource => resource.id === id);
+  if (index < 0) {
+    throw new Error(`Could not find resource by id '${id}`);
+  }
+  const existingResource = resources[index];
+  resources[index] = {
+    ...existingResource,
+    ...resourceData,
+    id,
+    resourceType
+  }
+}
+
 /////////////////////
 
 const getBookById = id => getResourceByIdAndType(id, "Book");
@@ -616,6 +631,21 @@ const returnBookCopy = (bookCopyId, borrowerId) => {
   bookCopy.borrowerId = null;
 }
 
+function updateBookCopy(id, bookCopyData) {
+  const { ownerId, BookId, borrowerId } = bookCopyData;
+  if (!getUserById(ownerId)) {
+    throw new Error(`BookCopy needs valid ownerId '${ownerId}'`);
+  }
+  if (!getBookById(BookId)) {
+    throw new Error(`BookCopy needs valid BookId '${BookId}'`);
+  }
+  
+  if (borrowerId && !getUserById(borrowerId)) {
+    throw new Error(`BookCopy needs valid or empty borrowerId '${borrowerdId}'`);
+  }
+  updateBookCopy(id, "BookCopy", { ownerId, BookId, borrowerId });
+
+}
 
 const getResourceByIdAndType = (id, type) => {
   try {
@@ -674,6 +704,8 @@ const db = {
  returnBookCopy,
  borrowRandomCopy,
  deleteBookCopy,
+ updateBookCopy,
+ 
  
  getResourceByIdAndType,
  getAllResourcesByType
