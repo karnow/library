@@ -597,7 +597,10 @@ const borrowBookCopy = (bookCopyId, borrowerId) => {
   if (bookCopy.ownerId === borrowerId){
     throw new Error("you cannot borrow your own book")
   }
-  bookCopy.borrowerId = borrowerId;
+  updateBookCopy(bookCopyId, {
+    ...bookCopy,
+    borrowerId
+  })
   
 }
 
@@ -643,7 +646,7 @@ function updateBookCopy(id, bookCopyData) {
   if (borrowerId && !getUserById(borrowerId)) {
     throw new Error(`BookCopy needs valid or empty borrowerId '${borrowerdId}'`);
   }
-  updateBookCopy(id, "BookCopy", { ownerId, BookId, borrowerId });
+  updateResource(id, "BookCopy", { ownerId, BookId, borrowerId });
 
 }
 
