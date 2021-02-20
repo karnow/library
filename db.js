@@ -631,7 +631,10 @@ const returnBookCopy = (bookCopyId, borrowerId) => {
   if (bookCopy.borrowerId !== borrowerId){
      throw new Error("Book copy can only be returned by the user who borrowed it")
   }
-  bookCopy.borrowerId = null;
+  updateBookCopy(bookCopyId, {
+    ...bookCopy,
+    borrowerId: null
+  })
 }
 
 function updateBookCopy(id, bookCopyData) {
