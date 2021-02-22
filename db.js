@@ -664,7 +664,19 @@ function updateUser(id, userData) {
   updateResource(id, "User", { name, info });
 }
 
-updateUser("1", {name:"Karol", info:"To ja pisarz Karol Nowakowski"})
+// 
+function updateBook(id, bookData) {
+  const { title, description } = bookData;
+  if (!title) {
+    throw new Error(`Book needs title cannot be empty '${title}`);
+  }
+  if (!description) {
+    throw new Error(`Book needs description cannot be empty '${description}`);
+  }
+  updateResource(id, "Book", { title, description });
+}
+
+
 /////
 const getResourceByIdAndType = (id, type) => {
   try {
@@ -702,6 +714,7 @@ const db = {
  getAllBooks,
  getBookById,
  deleteBook,
+ updateBook,
  
  getAllAuthors,
  getAuthorById,
@@ -710,6 +723,7 @@ const db = {
  getAllUsers,
  getUserById,
  deleteUser,
+ updateUser,
  
   
  getBooksByAuthorId,
