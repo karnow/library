@@ -777,6 +777,29 @@ function createBookCopy(bookCopyData) {
     })
 }
 
+const VALID_COVER =["harry1","harry2","harry3","harry4","harry5","harry6","harry7","expanse1","expanse2","expanse3","expanse4","expanse5","expanse6","expanse7","expanse7","witcher1","witcher2","witcher3","witcher4","witcher5"];
+function createBook(bookData) {
+  const { authorId, title, description } = bookData;
+  if (!title) {
+    throw new Error(`Book needs title cannot be empty`);
+  }
+  if (!description) {
+    throw new Error(`Book needs description cannot be empty`);
+  }
+  if (!getAuthorById(authorId)) {
+    throw new Error(`Book needs valid authorId`);
+  }
+  const cover = VALID_COVER[Math.floor(Math.random() * VALID_COVER.length)]
+  return createResource("Book", { 
+      authorId,
+      title,
+      coverPath: `/images/book-covers/${cover}.jpg`,
+      description
+     }
+  )
+}
+
+
 /////
 
 
@@ -803,11 +826,12 @@ function deleteAuthor(id) {
 
 
 // deleteUser("1")
-const user = createUser({ name: "Karol", email: "karol@onet.pl", info: "to ja stary dziad" });
-console.log(user)
- const Book = createBookCopy({ownerId:"5", borrowerId:"2",bookId:"1"})
+// const user = createUser({ name: "Karol", email: "karol@onet.pl", info: "to ja stary dziad" });
+// console.log(user)
+//  const Bookcopi = createBookCopy({ownerId:"5", borrowerId:"2",bookId:"1"})
+// console.log(Bookcopi);
+const Book = createBook({ authorId: "1", title:"dzieci z bulerbin",description:"cholera jaka fajna ksiązka" })
 console.log(Book);
-
 
 const db = {
  getAllBooks,
@@ -846,4 +870,4 @@ const db = {
  
 };
 
-module.exports = db;
+module.exports = db; 
