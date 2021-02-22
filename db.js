@@ -536,10 +536,7 @@ function findAllResourcesByType(resourceType) {
   return resources;
 }
 
-function getAllResourcesByType(resourceType) {
-  return[...findAllResourcesByType(resourceType)]
 
-}
 
 function deleteResource(id, resourceType) {
   const resources = findAllResourcesByType(resourceType);
@@ -565,7 +562,33 @@ function updateResource(id, resourceType, resourceData) {
   }
 }
 
+function createResource(resourceType, resourceData) {
+  const resources = findAllResourcesByType(resourceType);
+  const id = resources.length + 1;
+  const createResource = {
+    ...resourceData,
+    resourceType,
+    id
+  };
+  resources.push(createResource);
+  return createResource;
+}
+
 /////////////////////
+const getResourceByIdAndType = (id, type) => {
+  try {
+    return ({
+      ...findResourceByIdAndType(id, type)
+    })
+  } catch (error) {
+    return null;
+  }
+}
+
+function getAllResourcesByType(resourceType) {
+  return[...findAllResourcesByType(resourceType)]
+
+}
 
 const getBookById = id => getResourceByIdAndType(id, "Book");
 const getAuthorById = (id) =>getResourceByIdAndType(id, "Author");
@@ -625,6 +648,7 @@ const borrowRandomCopy = (borrowerdId) => {
   
 const returnBookCopy = (bookCopyId, borrowerId) => {
   const bookCopy = findResourceByIdAndType(bookCopyId, "BookCopy")
+  
   if (!bookCopy.borrowerId) {
     throw new Error("Cannot return the book copy. It hasn't been borrowed.")
   }
@@ -637,21 +661,25 @@ const returnBookCopy = (bookCopyId, borrowerId) => {
   })
 }
 
+
 function updateBookCopy(id, bookCopyData) {
-  const { ownerId, BookId, borrowerId } = bookCopyData;
+  const { ownerId, bookId, borrowerId } = bookCopyData;
+  
   if (!getUserById(ownerId)) {
     throw new Error(`BookCopy needs valid ownerId '${ownerId}'`);
-  }
-  if (!getBookById(BookId)) {
-    throw new Error(`BookCopy needs valid BookId '${BookId}'`);
+  }  
+  if (!getBookById(bookId)) {
+    throw new Error(`BookCopy needs valid BookId '${bookId}'`);
   }
   
   if (borrowerId && !getUserById(borrowerId)) {
     throw new Error(`BookCopy needs valid or empty borrowerId '${borrowerdId}'`);
   }
-  updateResource(id, "BookCopy", { ownerId, BookId, borrowerId });
+  updateResource(id, "BookCopy", { ownerId, bookId, borrowerId });
 
 }
+
+
 
 function updateUser(id, userData) {
   const { name, info } = userData;
@@ -687,17 +715,36 @@ function updateAuthor(id, authorData) {
   updateResource(id, "Author", { name, bio });
 }
 
+const VALID_AVATAR_COLORS = ["red", "green", "blue", "yellow", "magenta", "pink", "black"];
+
+function createUser(userData) {
+  const { name, email, info } = userData;
+  if (!name || name.length < 1) {
+    throw new Error("User needs valid name");
+  }
+  if (!email || !email.match(/@/)) {
+    throw new Error("User needs valid email");
+  }
+  if (!info || info.length < 1) {
+    throw new Error("User needs valid info");
+  }
+  const color = VALID_AVATAR_COLORS[Math.floor(Math.random() * VALID_AVATAR_COLORS.length)];
+  const avatarName = `${Math.random()>0.5 ? "m" : "w"}${Math.ceil(Math.random()* 25)}`
+  return createResource("User", {    
+    name,
+    email,
+    info,
+    avatar: {
+      imagePath: `/images/avatars/${avatarName}.png`,
+      color
+    }
+  });
+}
+
+
 
 /////
-const getResourceByIdAndType = (id, type) => {
-  try {
-    return ({
-      ...findResourceByIdAndType(id, type)
-    })
-  } catch (error) {
-    return null;
-  }
-}
+
 
 function deleteBookCopy(id) {
   deleteResource(id, "BookCopy");
@@ -718,9 +765,12 @@ function deleteAuthor(id) {
   getBooksByAuthorId(id).forEach(book => deleteBook(book.id));
   deleteResource(id, "Author");
   
- }
+}
 
-
+// deleteUser("2")
+// const user = createUser({ name: "Karol", email: "karol@onet.pl", info: "to ja stary dziad" });
+// console.log(user)
+ 
 const db = {
  getAllBooks,
  getBookById,
