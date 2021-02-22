@@ -516,8 +516,12 @@ const data ={
     }
   ]
 
-};
-
+}; function initDb() {
+  initializeNextId("Book");
+  initializeNextId("Author");
+  initializeNextId("User");
+  initializeNextId("BookCopy");
+}
 //nisko poziomowe funkcje możemy jest traktować jako zapytania np sql
 function findResourceByIdAndType(id, resourceType) {
   const resources = findAllResourcesByType(resourceType);
@@ -564,7 +568,7 @@ function updateResource(id, resourceType, resourceData) {
 
 function createResource(resourceType, resourceData) {
   const resources = findAllResourcesByType(resourceType);
-  const id = resources.length + 1;
+  const id = generateNextId(resourceType);
   const createResource = {
     ...resourceData,
     resourceType,
@@ -573,6 +577,19 @@ function createResource(resourceType, resourceData) {
   resources.push(createResource);
   return createResource;
 }
+
+function initializeNextId(resourceType) {
+  const resources = findAllResourcesByType(resourceType);
+  if (!resources.nextId) {
+    resources.nextId = resources.length + 1;
+  }
+}
+function generateNextId(resourceType) {
+  const resources = findAllResourcesByType(resourceType);
+  return `${resources.nextId++}`;
+}
+
+initDb();
 
 /////////////////////
 const getResourceByIdAndType = (id, type) => {
@@ -768,8 +785,9 @@ function deleteAuthor(id) {
 }
 
 // deleteUser("2")
-// const user = createUser({ name: "Karol", email: "karol@onet.pl", info: "to ja stary dziad" });
-// console.log(user)
+// deleteUser("1")
+const user = createUser({ name: "Karol", email: "karol@onet.pl", info: "to ja stary dziad" });
+console.log(user)
  
 const db = {
  getAllBooks,
