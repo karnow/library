@@ -798,6 +798,23 @@ function createBook(bookData) {
      }
   )
 }
+const VALID_PHOTO = ["j-k-rowling", "james-s-a-corey", "andrzej-sapkowski"];
+function createAuthor(authorData) {
+  const { name, bio } = authorData;
+  if (!name) {
+    throw new Error(`Author needs name cannot be empty `);
+  }
+  if (!bio) {
+    throw new Error(`Author needs bio cannot be empty`);
+  }
+  const cover = VALID_PHOTO[Math.floor(Math.random() * VALID_PHOTO.length)]
+  return createResource("Author", {
+      name,
+      photoPath: `/images/book-authors/${cover}.jpg`,
+      bio
+     }
+  )
+}
 
 
 /////
@@ -830,8 +847,10 @@ function deleteAuthor(id) {
 // console.log(user)
 //  const Bookcopi = createBookCopy({ownerId:"5", borrowerId:"2",bookId:"1"})
 // console.log(Bookcopi);
-const Book = createBook({ authorId: "1", title:"dzieci z bulerbin",description:"cholera jaka fajna ksiązka" })
-console.log(Book);
+// const Book = createBook({ authorId: "1", title:"dzieci z bulerbin",description:"cholera jaka fajna ksiązka" })
+// console.log(Book);
+// const author = createAuthor({ name: "Wiesław Podlach", bio: "Ksiądz z Amager" })
+// console.log(author);
 
 const db = {
  getAllBooks,
