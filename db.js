@@ -653,6 +653,19 @@ function updateBookCopy(id, bookCopyData) {
 
 }
 
+function updateUser(id, userData) {
+  const { name, info } = userData;
+  if (!name) {
+    throw new Error(`user needs name cannot be empty '${name}`);
+  }
+  if (!info) {
+    throw new Error(`user needs info cannot be empty '${name}`);
+  }
+  updateResource(id, "User", { name, info });
+}
+
+updateUser("1", {name:"Karol", info:"To ja pisarz Karol Nowakowski"})
+/////
 const getResourceByIdAndType = (id, type) => {
   try {
     return ({
