@@ -664,7 +664,7 @@ function updateUser(id, userData) {
   updateResource(id, "User", { name, info });
 }
 
-// 
+
 function updateBook(id, bookData) {
   const { title, description } = bookData;
   if (!title) {
@@ -674,6 +674,17 @@ function updateBook(id, bookData) {
     throw new Error(`Book needs description cannot be empty '${description}`);
   }
   updateResource(id, "Book", { title, description });
+}
+
+function updateAuthor(id, authorData) {
+  const { name, bio } = authorData;
+  if (!name) {
+    throw new Error(`Author needs name cannot be empty '${name}`);
+  }
+  if (!bio) {
+    throw new Error(`Author needs bio cannot be empty '${bio}`);
+  }
+  updateResource(id, "Author", { name, bio });
 }
 
 
@@ -719,6 +730,7 @@ const db = {
  getAllAuthors,
  getAuthorById,
  deleteAuthor,
+ updateAuthor,
 
  getAllUsers,
  getUserById,
