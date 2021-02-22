@@ -758,7 +758,24 @@ function createUser(userData) {
   });
 }
 
-
+function createBookCopy(bookCopyData) {
+  const { ownerId, bookId, borrowerId } = bookCopyData;
+  if (!getUserById(ownerId)) {
+    throw new Error(`BookCopy needs valid ownerId '${ownerId}'`);
+  }  
+  if (!getBookById(bookId)) {
+    throw new Error(`BookCopy needs valid BookId '${bookId}'`);
+  }
+  
+  if (borrowerId && !getUserById(borrowerId)) {
+    throw new Error(`BookCopy needs valid or empty borrowerId '${borrowerdId}'`);
+  }
+  return createResource("BookCopy", {
+      ownerId,
+      borrowerId,
+      bookId
+    })
+}
 
 /////
 
@@ -784,11 +801,14 @@ function deleteAuthor(id) {
   
 }
 
-// deleteUser("2")
+
 // deleteUser("1")
 const user = createUser({ name: "Karol", email: "karol@onet.pl", info: "to ja stary dziad" });
 console.log(user)
- 
+ const Book = createBookCopy({ownerId:"5", borrowerId:"2",bookId:"1"})
+console.log(Book);
+
+
 const db = {
  getAllBooks,
  getBookById,
