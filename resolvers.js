@@ -92,6 +92,10 @@ const resolvers = {
     },
     createUser: (rootValue, { name, email, info }, { db }) => {
       return db.createUser({ name, email, info });
+    },
+    updateUser: (rootValue, { id, name, info }, { db }) => {
+      db.updateUser(toDbId(id), { name, info });
+      return db.getUserById(toDbId(id));
     }
   },
 
