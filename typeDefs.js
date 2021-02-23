@@ -23,7 +23,9 @@ type Mutation {
     borrowBookCopy(id: ID!): BookCopy!
     borrowRandomBook: BookCopy!
     returnBookCopy(id: ID!): BookCopy!
-    
+    createUser(name: String!, email: String!, info: String!): User
+    updateUser(id: ID!, name: String!, info: String!): User
+    deleteUser(id: ID!): ID
 }
 union Anything = Author | Book | User | BookCopy
 

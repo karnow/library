@@ -89,6 +89,9 @@ const resolvers = {
       const id = db.borrowRandomCopy(currentUserDbId);
       console.log(id);
       return db.getBookCopyById(id);
+    },
+    createUser: (rootValue, { name, email, info }, { db }) => {
+      return db.createUser({ name, email, info });
     }
   },
 

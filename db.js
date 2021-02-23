@@ -700,11 +700,11 @@ function updateBookCopy(id, bookCopyData) {
 
 function updateUser(id, userData) {
   const { name, info } = userData;
-  if (!name) {
-    throw new Error(`user needs name cannot be empty '${name}`);
+  if (!name || name.length < 0) {
+    throw new Error(`user needs valid name and cannot be empty `);
   }
-  if (!info) {
-    throw new Error(`user needs info cannot be empty '${name}`);
+  if (!info || info.length < 0) {
+    throw new Error(`user needs calid info cannot be empty `);
   }
   updateResource(id, "User", { name, info });
 }
@@ -857,16 +857,19 @@ const db = {
  getBookById,
  deleteBook,
  updateBook,
+ createBook,
  
  getAllAuthors,
  getAuthorById,
  deleteAuthor,
  updateAuthor,
+ createAuthor,
 
  getAllUsers,
  getUserById,
  deleteUser,
  updateUser,
+ createUser,
  
   
  getBooksByAuthorId,
@@ -881,6 +884,7 @@ const db = {
  borrowRandomCopy,
  deleteBookCopy,
  updateBookCopy,
+ createBookCopy,
  
  
  getResourceByIdAndType,
