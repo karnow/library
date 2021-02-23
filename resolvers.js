@@ -96,6 +96,10 @@ const resolvers = {
     updateUser: (rootValue, { id, name, info }, { db }) => {
       db.updateUser(toDbId(id), { name, info });
       return db.getUserById(toDbId(id));
+    },
+    deleteUser: (rootValue, { id }, { db }) => {
+      db.deleteUser(toDbId(id));
+      return id;
     }
   },
 
