@@ -31,6 +31,7 @@ type Mutation {
     deleteAuthor(id: ID!): ID
     createBook(author_Id: ID!, title:String!, description:String!):Book
     updateBook(id: ID!, title: String!, description: String!):Book
+    deleteBook(id: ID!): ID
 }
 union Anything = Author | Book | User | BookCopy
 

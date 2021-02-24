@@ -123,7 +123,12 @@ const resolvers = {
     updateBook: (rootValue, { id, title, description }) => {
       db.updateBook(toDbId(id), { title, description });
       return getBookById(toDbId(id));
+    },
+    deleteBook: (rootValue, { id }, { db }) => {
+      db.deleteBook(toDbId(id));
+      return id;
     }
+
   },
 
   Book: {
