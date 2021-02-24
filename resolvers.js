@@ -112,6 +112,13 @@ const resolvers = {
       db.deleteAuthor(toDbId(id));
       return id;
     },
+    createBook: (rootValue, { author_Id, title, description }, { db }) => {
+      console.log(author_Id, title, description);
+      const authorId = (toDbId(author_Id))
+       
+      console.log(authorId);
+       return db.createBook({authorId, title, description });
+    }
   },
 
   Book: {
