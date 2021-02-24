@@ -107,7 +107,11 @@ const resolvers = {
     updateAuthor: (rootValue, { id, name, bio }, { db }) => {
       db.updateAuthor(toDbId(id), { name, bio });
       return db.getAuthorById(toDbId(id));
-    }
+    },
+    deleteAuthor: (rootValue, { id }, { db }) => {
+      db.deleteAuthor(toDbId(id));
+      return id;
+    },
   },
 
   Book: {
