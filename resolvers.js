@@ -103,6 +103,10 @@ const resolvers = {
     },
     createAuthor: (rootValue, { name, bio }, { db }) => {
       return db.createAuthor({ name, bio });
+    },
+    updateAuthor: (rootValue, { id, name, bio }, { db }) => {
+      db.updateAuthor(toDbId(id), { name, bio });
+      return db.getAuthorById(toDbId(id));
     }
   },
 
