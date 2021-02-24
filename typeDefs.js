@@ -30,6 +30,7 @@ type Mutation {
     updateAuthor(id: ID!, name:String!, bio: String!): Author
     deleteAuthor(id: ID!): ID
     createBook(author_Id: ID!, title:String!, description:String!):Book
+    updateBook(id: ID!, title: String!, description: String!):Book
 }
 union Anything = Author | Book | User | BookCopy
 

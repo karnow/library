@@ -1,3 +1,4 @@
+const { getBookById } = require("./db");
 const db = require("./db");
 
 // const {nanoid} = require('nanoid');
@@ -118,6 +119,10 @@ const resolvers = {
        
       console.log(authorId);
        return db.createBook({authorId, title, description });
+    },
+    updateBook: (rootValue, { id, title, description }) => {
+      db.updateBook(toDbId(id), { title, description });
+      return getBookById(toDbId(id));
     }
   },
 
