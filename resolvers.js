@@ -133,6 +133,13 @@ const resolvers = {
       const bookId = (toDbId(book_Id));
       const borrowerId = (toDbId(borrower_Id));
       return db.createBookCopy({ownerId, bookId, borrowerId})
+    },
+    updateBookCopy: (rootValue, { id, owner_Id, book_Id, borrower_Id }, { db }) => {
+      const ownerId = (toDbId(owner_Id));
+      const bookId = (toDbId(book_Id));
+      const borrowerId = (toDbId(borrower_Id));
+      db.updateBookCopy(toDbId(id), { ownerId, bookId, borrowerId });
+      return db.getBookCopyById(toDbId(id));
     }
 
   },
