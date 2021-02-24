@@ -26,6 +26,7 @@ type Mutation {
     createUser(name: String!, email: String!, info: String!): User
     updateUser(id: ID!, name: String!, info: String!): User
     deleteUser(id: ID!): ID
+    createAuthor(name: String!, bio:String!):Author
 }
 union Anything = Author | Book | User | BookCopy
 

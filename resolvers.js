@@ -100,6 +100,9 @@ const resolvers = {
     deleteUser: (rootValue, { id }, { db }) => {
       db.deleteUser(toDbId(id));
       return id;
+    },
+    createAuthor: (rootValue, { name, bio }, { db }) => {
+      return db.createAuthor({ name, bio });
     }
   },
 
