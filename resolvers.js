@@ -140,6 +140,10 @@ const resolvers = {
       const borrowerId = (toDbId(borrower_Id));
       db.updateBookCopy(toDbId(id), { ownerId, bookId, borrowerId });
       return db.getBookCopyById(toDbId(id));
+    },
+    deleteBookCopy: (rootValue, { id }, { db }) => {
+      db.deleteBookCopy(toDbId(id));
+      return id;
     }
 
   },
