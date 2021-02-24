@@ -1,4 +1,4 @@
-const { getBookById } = require("./db");
+const { getBookById, createBookCopy } = require("./db");
 const db = require("./db");
 
 // const {nanoid} = require('nanoid');
@@ -127,6 +127,12 @@ const resolvers = {
     deleteBook: (rootValue, { id }, { db }) => {
       db.deleteBook(toDbId(id));
       return id;
+    },
+    createBookCopy: (rootValue, { owner_Id, book_Id, borrower_Id }, { db }) => {
+      const ownerId = (toDbId(owner_Id));
+      const bookId = (toDbId(book_Id));
+      const borrowerId = (toDbId(borrower_Id));
+      return db.createBookCopy({ownerId, bookId, borrowerId})
     }
 
   },

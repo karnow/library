@@ -32,6 +32,7 @@ type Mutation {
     createBook(author_Id: ID!, title:String!, description:String!):Book
     updateBook(id: ID!, title: String!, description: String!):Book
     deleteBook(id: ID!): ID
+    createBookCopy(owner_Id:ID!, book_Id:ID!, borrower_Id:ID!):BookCopy
 }
 union Anything = Author | Book | User | BookCopy
 

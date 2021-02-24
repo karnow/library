@@ -845,8 +845,8 @@ function deleteAuthor(id) {
 // deleteUser("1")
 // const user = createUser({ name: "Karol", email: "karol@onet.pl", info: "to ja stary dziad" });
 // console.log(user)
-//  const Bookcopi = createBookCopy({ownerId:"5", borrowerId:"2",bookId:"1"})
-// console.log(Bookcopi);
+ const Bookcopi = createBookCopy({ownerId:"4", borrowerId:"2",bookId:"1"})
+console.log(Bookcopi);
 // const Book = createBook({ authorId: "1", title:"dzieci z bulerbin",description:"cholera jaka fajna ksiązka" })
 // console.log(Book);
 // const author = createAuthor({ name: "Wiesław Podlach", bio: "Ksiądz z Amager" })
