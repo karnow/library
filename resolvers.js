@@ -144,6 +144,10 @@ const resolvers = {
     deleteBookCopy: (rootValue, { id }, { db }) => {
       db.deleteBookCopy(toDbId(id));
       return id;
+    },
+    resetData: (rootValue, args, { db }) => {
+      db.revertToInitialData();
+      return true;
     }
 
   },

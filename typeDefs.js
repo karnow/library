@@ -35,6 +35,7 @@ type Mutation {
     createBookCopy(owner_Id:ID!, book_Id:ID!, borrower_Id:ID!):BookCopy
     updateBookCopy(id: ID!, owner_Id:ID!, book_Id:ID!, borrower_Id:ID! ):BookCopy
     deleteBookCopy(id: ID!): ID
+    resetData: Boolean
 }
 union Anything = Author | Book | User | BookCopy
 

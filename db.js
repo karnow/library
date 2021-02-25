@@ -1,4 +1,4 @@
-const data ={
+const initialData= () =>({
   Book: [
     { id: "1",
       resourceType: "Book",
@@ -516,7 +516,11 @@ const data ={
     }
   ]
 
-}; function initDb() {
+});
+let data = {};
+
+function initDb() {
+  data = initialData();
   initializeNextId("Book");
   initializeNextId("Author");
   initializeNextId("User");
@@ -852,6 +856,11 @@ function deleteAuthor(id) {
 // const author = createAuthor({ name: "Wiesław Podlach", bio: "Ksiądz z Amager" })
 // console.log(author);
 
+//inicjalizacja bazy danych i indeksowania nowych recordów
+function revertToInitialData() {
+  initDb();
+}
+
 const db = {
  getAllBooks,
  getBookById,
@@ -888,8 +897,8 @@ const db = {
  
  
  getResourceByIdAndType,
- getAllResourcesByType
- 
+ getAllResourcesByType,
+ revertToInitialData
  
 };
 
