@@ -38,18 +38,22 @@ type Mutation {
     resetData: ResetMutationResult
 }
 union Anything = Author | Book | User | BookCopy
-
-type UserMutationResult {
+ 
+interface MutationResult {
+    success: Boolean!
+    message: String!
+}
+type UserMutationResult implements MutationResult{
     success: Boolean!
     message: String!
     user: User
 }
-type DeleteUserMutationResult {
+type DeleteUserMutationResult implements MutationResult{
     success: Boolean!
     message: String!
     id: ID
 }
-type ResetMutationResult {
+type ResetMutationResult implements MutationResult{
     success: Boolean!
     message: String!
 }

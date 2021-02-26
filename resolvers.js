@@ -276,6 +276,9 @@ const resolvers = {
     __resolveType: resource => resource.resourceType
         
   },
+  MutationResult: {
+    __resolveType: ()=>null
+  }
 };
 
 module.exports = resolvers;
