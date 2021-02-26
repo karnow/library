@@ -184,16 +184,38 @@ const resolvers = {
           
     },
     createBook: (rootValue, { author_Id, title, description }, { db }) => {
-      console.log(author_Id, title, description);
-      const authorId = (toDbId(author_Id))
-       
-      console.log(authorId);
-       return db.createBook({authorId, title, description });
+      try {
+        console.log(author_Id, title, description);
+        const authorId = (toDbId(author_Id))
+        return {
+          success: true,
+          message: "Book successfully created",
+          book: db.createBook({authorId, title, description })
+        };
+      } catch (error) {
+        return {
+          success: false,
+          message: error.message
+        };
+      }
+           
     },
     updateBook: (rootValue, { id, title, description }) => {
-      db.updateBook(toDbId(id), { title, description });
-      return getBookById(toDbId(id));
+      try {
+         db.updateBook(toDbId(id), { title, description });
+        return {
+          success: true,
+          message: "Book successfully updated",
+          book: getBookById(toDbId(id))
+        };
+      } catch (error) { 
+        return {
+          success: false,
+          message: error.message
+        };
+      }      
     },
+
     deleteBook: (rootValue, { id }, { db }) => {
       db.deleteBook(toDbId(id));
       return id;
