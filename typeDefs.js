@@ -25,7 +25,7 @@ type Mutation {
     returnBookCopy(id: ID!): BookCopy!
     createUser(name: String!, email: String!, info: String!): UserMutationResult
     updateUser(id: ID!, name: String!, info: String!): UserMutationResult
-    deleteUser(id: ID!): ID
+    deleteUser(id: ID!): DeleteUserMutationResult
     createAuthor(name: String!, bio:String!):Author
     updateAuthor(id: ID!, name:String!, bio: String!): Author
     deleteAuthor(id: ID!): ID
@@ -35,7 +35,7 @@ type Mutation {
     createBookCopy(owner_Id:ID!, book_Id:ID!, borrower_Id:ID!):BookCopy
     updateBookCopy(id: ID!, owner_Id:ID!, book_Id:ID!, borrower_Id:ID! ):BookCopy
     deleteBookCopy(id: ID!): ID
-    resetData: Boolean
+    resetData: ResetMutationResult
 }
 union Anything = Author | Book | User | BookCopy
 
@@ -43,6 +43,15 @@ type UserMutationResult {
     success: Boolean!
     message: String!
     user: User
+}
+type DeleteUserMutationResult {
+    success: Boolean!
+    message: String!
+    id: ID
+}
+type ResetMutationResult {
+    success: Boolean!
+    message: String!
 }
 
 interface Resource {

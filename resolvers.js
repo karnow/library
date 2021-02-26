@@ -122,8 +122,19 @@ const resolvers = {
       
     },
     deleteUser: (rootValue, { id }, { db }) => {
-      db.deleteUser(toDbId(id));
-      return id;
+      try {
+        db.deleteUser(toDbId(id));
+        return {
+          success: true,
+          message: "User successfully deleted",
+          id
+        };
+      } catch (error) { 
+        return {
+          success: false,
+          message: error.message
+        };
+      }      
     },
     createAuthor: (rootValue, { name, bio }, { db }) => {
       return db.createAuthor({ name, bio });
@@ -169,8 +180,19 @@ const resolvers = {
       return id;
     },
     resetData: (rootValue, args, { db }) => {
-      db.revertToInitialData();
-      return true;
+      try {
+        db.revertToInitialData();
+        return {
+          success: true,
+          message: "Successfully restored initial data"
+          
+        };
+      } catch (error) { 
+        return {
+          success: false,
+          message: error.message
+        };
+      }       
     }
 
   },
