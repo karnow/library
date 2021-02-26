@@ -34,7 +34,7 @@ type Mutation {
     deleteBook(id: ID!): DeleteBookMutationResult
     createBookCopy(owner_Id:ID!, book_Id:ID!, borrower_Id:ID!):BookCopyMutationResult
     updateBookCopy(id: ID!, owner_Id:ID!, book_Id:ID!, borrower_Id:ID! ):BookCopyMutationResult
-    deleteBookCopy(id: ID!): ID
+    deleteBookCopy(id: ID!): DeleteBookCopyMutationResult
     resetData: ResetMutationResult
 }
 union Anything = Author | Book | User | BookCopy
@@ -49,6 +49,11 @@ type BookCopyMutationResult implements MutationResult{
     success: Boolean!
     message: String!
     bookcopy: BookCopy
+}
+type DeleteBookCopyMutationResult implements MutationResult{
+    success: Boolean!
+    message: String!
+    id: ID
 }
 type BookMutationResult implements MutationResult{
     success: Boolean!

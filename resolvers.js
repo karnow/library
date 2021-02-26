@@ -271,8 +271,20 @@ const resolvers = {
            
     },
     deleteBookCopy: (rootValue, { id }, { db }) => {
-      db.deleteBookCopy(toDbId(id));
-      return id;
+      try {
+        db.deleteBookCopy(toDbId(id));
+        return {
+          success: true,
+          message: "BookCopy successfully deleted",
+          id
+        };
+      } catch (error) { 
+        return {
+          success: false,
+          message: error.message
+        };
+      }    
+    
     },
     resetData: (rootValue, args, { db }) => {
       try {
