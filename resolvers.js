@@ -137,11 +137,35 @@ const resolvers = {
       }      
     },
     createAuthor: (rootValue, { name, bio }, { db }) => {
-      return db.createAuthor({ name, bio });
+      try {
+        return {
+          success: true,
+          message: "Author successfully created",
+          author: db.createAuthor({ name, bio })
+        };
+      } catch (error) {
+        return {
+          success: false,
+          message: error.message
+        };
+      }
+      
     },
     updateAuthor: (rootValue, { id, name, bio }, { db }) => {
-      db.updateAuthor(toDbId(id), { name, bio });
-      return db.getAuthorById(toDbId(id));
+      try {
+        db.updateAuthor(toDbId(id), { name, bio });
+        return {
+          success: true,
+          message: "Author successfully updated",
+          author: db.getAuthorById(toDbId(id))
+        };
+      } catch (error) { 
+        return {
+          success: false,
+          message: error.message
+        };
+      }
+          
     },
     deleteAuthor: (rootValue, { id }, { db }) => {
       db.deleteAuthor(toDbId(id));

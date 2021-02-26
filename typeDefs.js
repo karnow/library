@@ -26,8 +26,8 @@ type Mutation {
     createUser(name: String!, email: String!, info: String!): UserMutationResult
     updateUser(id: ID!, name: String!, info: String!): UserMutationResult
     deleteUser(id: ID!): DeleteUserMutationResult
-    createAuthor(name: String!, bio:String!):Author
-    updateAuthor(id: ID!, name:String!, bio: String!): Author
+    createAuthor(name: String!, bio:String!):AuthorMutationResult
+    updateAuthor(id: ID!, name:String!, bio: String!): AuthorMutationResult
     deleteAuthor(id: ID!): ID
     createBook(author_Id: ID!, title:String!, description:String!):Book
     updateBook(id: ID!, title: String!, description: String!):Book
@@ -42,6 +42,11 @@ union Anything = Author | Book | User | BookCopy
 interface MutationResult {
     success: Boolean!
     message: String!
+}
+type AuthorMutationResult implements MutationResult{
+    success: Boolean!
+    message: String!
+    author: Author
 }
 type UserMutationResult implements MutationResult{
     success: Boolean!
