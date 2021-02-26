@@ -168,8 +168,20 @@ const resolvers = {
           
     },
     deleteAuthor: (rootValue, { id }, { db }) => {
-      db.deleteAuthor(toDbId(id));
-      return id;
+      try {
+        db.deleteAuthor(toDbId(id));
+        return {
+          success: true,
+          message: "Author successfully deleted",
+          id
+        };
+      } catch (error) { 
+        return {
+          success: false,
+          message: error.message
+        };
+      }    
+          
     },
     createBook: (rootValue, { author_Id, title, description }, { db }) => {
       console.log(author_Id, title, description);

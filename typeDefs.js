@@ -28,7 +28,7 @@ type Mutation {
     deleteUser(id: ID!): DeleteUserMutationResult
     createAuthor(name: String!, bio:String!):AuthorMutationResult
     updateAuthor(id: ID!, name:String!, bio: String!): AuthorMutationResult
-    deleteAuthor(id: ID!): ID
+    deleteAuthor(id: ID!): DeleteAuthorMutationResult
     createBook(author_Id: ID!, title:String!, description:String!):Book
     updateBook(id: ID!, title: String!, description: String!):Book
     deleteBook(id: ID!): ID
@@ -47,6 +47,11 @@ type AuthorMutationResult implements MutationResult{
     success: Boolean!
     message: String!
     author: Author
+}
+type DeleteAuthorMutationResult implements MutationResult{
+    success: Boolean!
+    message: String!
+    id: ID
 }
 type UserMutationResult implements MutationResult{
     success: Boolean!
