@@ -233,17 +233,42 @@ const resolvers = {
      
     },
     createBookCopy: (rootValue, { owner_Id, book_Id, borrower_Id }, { db }) => {
+      try {
       const ownerId = (toDbId(owner_Id));
       const bookId = (toDbId(book_Id));
       const borrowerId = (toDbId(borrower_Id));
-      return db.createBookCopy({ownerId, bookId, borrowerId})
+        return {
+          success: true,
+          message: "BookCopy successfully created",
+          bookcopy: db.createBookCopy({ownerId, bookId, borrowerId})
+        };
+      } catch (error) { 
+        return {
+          success: false,
+          message: error.message
+        };
+      }
+     
     },
     updateBookCopy: (rootValue, { id, owner_Id, book_Id, borrower_Id }, { db }) => {
+      try {
       const ownerId = (toDbId(owner_Id));
       const bookId = (toDbId(book_Id));
       const borrowerId = (toDbId(borrower_Id));
       db.updateBookCopy(toDbId(id), { ownerId, bookId, borrowerId });
-      return db.getBookCopyById(toDbId(id));
+        
+        return {
+          success: true,
+          message: "BookCopy successfully updated",
+          bookcopy: db.getBookCopyById(toDbId(id))
+        };
+      } catch (error) { 
+        return {
+          success: false,
+          message: error.message
+        };
+      }      
+           
     },
     deleteBookCopy: (rootValue, { id }, { db }) => {
       db.deleteBookCopy(toDbId(id));
