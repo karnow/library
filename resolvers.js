@@ -217,8 +217,20 @@ const resolvers = {
     },
 
     deleteBook: (rootValue, { id }, { db }) => {
-      db.deleteBook(toDbId(id));
-      return id;
+      try {
+        db.deleteBook(toDbId(id));
+        return {
+          success: true,
+          message: "Book successfully deleted",
+          id
+        };
+      } catch (error) { 
+        return {
+          success: false,
+          message: error.message
+        };
+      }    
+     
     },
     createBookCopy: (rootValue, { owner_Id, book_Id, borrower_Id }, { db }) => {
       const ownerId = (toDbId(owner_Id));
