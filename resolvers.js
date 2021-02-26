@@ -92,11 +92,34 @@ const resolvers = {
       return db.getBookCopyById(id);
     },
     createUser: (rootValue, { name, email, info }, { db }) => {
-      return db.createUser({ name, email, info });
+      try {
+        return {
+          success: true,
+          message: "User successfully created",
+          user: db.createUser({ name, email, info })
+        };
+      } catch (error) {
+        return {
+          success: false,
+          message: error.message
+        };
+      }
     },
     updateUser: (rootValue, { id, name, info }, { db }) => {
-      db.updateUser(toDbId(id), { name, info });
-      return db.getUserById(toDbId(id));
+      try {
+        db.updateUser(toDbId(id), { name, info });
+        return {
+          success: true,
+          message: "User successfully updated",
+          user: db.getUserById(toDbId(id))
+        };
+      } catch (error) { 
+        return {
+          success: false,
+          message: error.message
+        };
+      }
+      
     },
     deleteUser: (rootValue, { id }, { db }) => {
       db.deleteUser(toDbId(id));
