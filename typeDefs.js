@@ -23,19 +23,19 @@ type Mutation {
     borrowBookCopy(id: ID!): BookCopy!
     borrowRandomBook: BookCopy!
     returnBookCopy(id: ID!): BookCopy!
-    createUser(input: CreateUserInput): UserMutationResult
-    updateUser(input: UpdateUserInput): UserMutationResult
-    deleteUser(id: ID!): DeleteUserMutationResult
-    createAuthor(name: String!, bio:String!):AuthorMutationResult
-    updateAuthor(id: ID!, name:String!, bio: String!): AuthorMutationResult
-    deleteAuthor(id: ID!): DeleteAuthorMutationResult
-    createBook(author_Id: ID!, title:String!, description:String!):BookMutationResult
-    updateBook(id: ID!, title: String!, description: String!):BookMutationResult
-    deleteBook(id: ID!): DeleteBookMutationResult
-    createBookCopy(owner_Id:ID!, book_Id:ID!, borrower_Id:ID!):BookCopyMutationResult
-    updateBookCopy(id: ID!, owner_Id:ID!, book_Id:ID!, borrower_Id:ID! ):BookCopyMutationResult
-    deleteBookCopy(id: ID!): DeleteBookCopyMutationResult
-    resetData: ResetMutationResult
+    createUser(input: CreateUserInput!): UserMutationResult!
+    updateUser(input: UpdateUserInput!): UserMutationResult!
+    deleteUser(id: ID!): DeleteUserMutationResult!
+    createAuthor(name: String!, bio:String!):AuthorMutationResult!
+    updateAuthor(id: ID!, name:String!, bio: String!): AuthorMutationResult!
+    deleteAuthor(id: ID!): DeleteAuthorMutationResult!
+    createBook(author_Id: ID!, title:String!, description:String!):BookMutationResult!
+    updateBook(id: ID!, title: String!, description: String!):BookMutationResult!
+    deleteBook(id: ID!): DeleteBookMutationResult!
+    createBookCopy(owner_Id:ID!, book_Id:ID!, borrower_Id:ID!):BookCopyMutationResult!
+    updateBookCopy(id: ID!, owner_Id:ID!, book_Id:ID!, borrower_Id:ID! ):BookCopyMutationResult!
+    deleteBookCopy(id: ID!): DeleteBookCopyMutationResult!
+    resetData: ResetMutationResult!
 }
 union Anything = Author | Book | User | BookCopy
  
