@@ -105,7 +105,7 @@ const resolvers = {
         };
       }
     },
-    updateUser: (rootValue, { id, name, info }, { db }) => {
+    updateUser: (rootValue, { input:{ id, name, info }}, { db }) => {
       try {
         db.updateUser(toDbId(id), { name, info });
         return {

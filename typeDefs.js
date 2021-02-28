@@ -24,7 +24,7 @@ type Mutation {
     borrowRandomBook: BookCopy!
     returnBookCopy(id: ID!): BookCopy!
     createUser(name: String!, email: String!, info: String!): UserMutationResult
-    updateUser(id: ID!, name: String!, info: String!): UserMutationResult
+    updateUser(input: UpdateUserInput): UserMutationResult
     deleteUser(id: ID!): DeleteUserMutationResult
     createAuthor(name: String!, bio:String!):AuthorMutationResult
     updateAuthor(id: ID!, name:String!, bio: String!): AuthorMutationResult
@@ -43,7 +43,11 @@ interface MutationResult {
     success: Boolean!
     message: String!
 }
-
+input UpdateUserInput {
+    id: ID!
+    name: String!
+    info: String!
+}
 
 type BookCopyMutationResult implements MutationResult{
     success: Boolean!
