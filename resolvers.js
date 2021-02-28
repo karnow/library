@@ -91,12 +91,12 @@ const resolvers = {
       console.log(id);
       return db.getBookCopyById(id);
     },
-    createUser: (rootValue, {input: { name, email, info }}, { db }) => {
+    createUser: (rootValue, { input }, { db }) => {
       try {
         return {
           success: true,
           message: "User successfully created",
-          user: db.createUser({ name, email, info })
+          user: db.createUser(input)
         };
       } catch (error) {
         return {
