@@ -91,7 +91,7 @@ const resolvers = {
       console.log(id);
       return db.getBookCopyById(id);
     },
-    createUser: (rootValue, { name, email, info }, { db }) => {
+    createUser: (rootValue, {input: { name, email, info }}, { db }) => {
       try {
         return {
           success: true,
