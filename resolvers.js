@@ -136,12 +136,12 @@ const resolvers = {
         };
       }      
     },
-    createAuthor: (rootValue, { name, bio }, { db }) => {
+    createAuthor: (rootValue, { input }, { db }) => {
       try {
         return {
           success: true,
           message: "Author successfully created",
-          author: db.createAuthor({ name, bio })
+          author: db.createAuthor(input )
         };
       } catch (error) {
         return {
