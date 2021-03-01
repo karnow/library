@@ -30,7 +30,7 @@ type Mutation {
     updateAuthor(input: UpdateAuthorInput!): AuthorMutationResult!
     deleteAuthor(id: ID!): DeleteAuthorMutationResult!
     createBook(input: CreateBookInput!):BookMutationResult!
-    updateBook(id: ID!, title: String!, description: String!):BookMutationResult!
+    updateBook(input: UpdateBookInput!):BookMutationResult!
     deleteBook(id: ID!): DeleteBookMutationResult!
     createBookCopy(owner_Id:ID!, book_Id:ID!, borrower_Id:ID!):BookCopyMutationResult!
     updateBookCopy(id: ID!, owner_Id:ID!, book_Id:ID!, borrower_Id:ID! ):BookCopyMutationResult!
@@ -42,6 +42,12 @@ union Anything = Author | Book | User | BookCopy
 interface MutationResult {
     success: Boolean!
     message: String!
+}
+input UpdateBookInput {
+    id: ID!
+    title: String!
+    description: String!
+
 }
 input CreateBookInput {
     author_Id: ID!

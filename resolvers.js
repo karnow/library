@@ -183,7 +183,7 @@ const resolvers = {
       }    
           
     },
-    createBook: (rootValue, { input: { author_Id, title, description } }, { db }) => {
+    createBook: (rootValue, {input:{ author_Id, title, description }}, { db }) => {
       try {
         console.log(author_Id, title, description);
         const authorId = (toDbId(author_Id))
@@ -200,7 +200,7 @@ const resolvers = {
       }
            
     },
-    updateBook: (rootValue, { id, title, description }) => {
+    updateBook: (rootValue, { input: { id, title, description } },{db}) => {
       try {
          db.updateBook(toDbId(id), { title, description });
         return {
