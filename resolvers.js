@@ -151,7 +151,7 @@ const resolvers = {
       }
       
     },
-    updateAuthor: (rootValue, { id, name, bio }, { db }) => {
+    updateAuthor: (rootValue, { input: { id, name, bio } }, { db }) => {
       try {
         db.updateAuthor(toDbId(id), { name, bio });
         return {
