@@ -250,7 +250,7 @@ const resolvers = {
       }
      
     },
-    updateBookCopy: (rootValue, { id, owner_Id, book_Id, borrower_Id }, { db }) => {
+    updateBookCopy: (rootValue, { input: { id, owner_Id, book_Id, borrower_Id } }, { db }) => {
       try {
       const ownerId = (toDbId(owner_Id));
       const bookId = (toDbId(book_Id));
