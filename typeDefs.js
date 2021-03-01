@@ -29,7 +29,7 @@ type Mutation {
     createAuthor(input:CreateAuthorInput!):AuthorMutationResult!
     updateAuthor(input: UpdateAuthorInput!): AuthorMutationResult!
     deleteAuthor(id: ID!): DeleteAuthorMutationResult!
-    createBook(author_Id: ID!, title:String!, description:String!):BookMutationResult!
+    createBook(input: CreateBookInput!):BookMutationResult!
     updateBook(id: ID!, title: String!, description: String!):BookMutationResult!
     deleteBook(id: ID!): DeleteBookMutationResult!
     createBookCopy(owner_Id:ID!, book_Id:ID!, borrower_Id:ID!):BookCopyMutationResult!
@@ -43,7 +43,11 @@ interface MutationResult {
     success: Boolean!
     message: String!
 }
-
+input CreateBookInput {
+    author_Id: ID!
+    title:String!
+    description:String!
+}
 input UpdateAuthorInput {
     id: ID!
     name: String!

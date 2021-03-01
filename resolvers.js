@@ -183,7 +183,7 @@ const resolvers = {
       }    
           
     },
-    createBook: (rootValue, { author_Id, title, description }, { db }) => {
+    createBook: (rootValue, { input: { author_Id, title, description } }, { db }) => {
       try {
         console.log(author_Id, title, description);
         const authorId = (toDbId(author_Id))
