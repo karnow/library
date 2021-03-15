@@ -1,7 +1,7 @@
 const {ApolloServer} = require("apollo-server");
 const typeDefs = require("./typeDefs");
 const resolvers = require("./resolvers");
-const db = require("./db");
+const dataAccess = require("./dataAccess");
 const { Search } = require("./search");
 const PORT = process.env.PORT || 4000
 const BASE_ASSETS_URL = process.env.BASE_ASSETS_URL || "http://examples.devmastery.pl/assets";
@@ -10,9 +10,9 @@ const server = new ApolloServer({
     typeDefs,
      resolvers,
       context: {
-          db,
+          dataAccess,
           currentUserDbId: "2",
-          search: new Search(db),
+          search: new Search(dataAccess),
           assetsBaseUrl: BASE_ASSETS_URL
       },
        playground:true,
