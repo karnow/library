@@ -64,12 +64,14 @@ const borrowRandomCopy = (borrowerdId) => {
     if (index === -1){
       throw new Error ('All books are on loan')
     }
-  const bookCopy = data.BookCopy[index];
+    
+  const bookCopy = getAllBookCopies()[index];
+//   const bookCopy = data.BookCopy[index];
   bookCopy.borrowerId = borrowerdId;
   // const toId = index => `${index + 1}`;
     // const id = toId(index);
     const id = `${index + 1}`; 
-    return id; 
+    return id;  
      
   }
     

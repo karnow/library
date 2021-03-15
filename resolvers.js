@@ -202,7 +202,7 @@ const resolvers = {
         return {
           success: true,
           message: "Book successfully updated",
-          book: getBookById(toDbId(id))
+          book: dataAccess.getBookById(toDbId(id))
         };
       } catch (error) { 
         return {
