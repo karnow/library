@@ -517,6 +517,7 @@ const initialData= () =>({
   ]
 
 });
+
 let data = {};
 
 function initDb() {
@@ -526,6 +527,7 @@ function initDb() {
   initializeNextId("User");
   initializeNextId("BookCopy");
 }
+
 //nisko poziomowe funkcje możemy jest traktować jako zapytania np sql
 function findResourceByIdAndType(id, resourceType) {
   const resources = findAllResourcesByType(resourceType);
@@ -582,6 +584,8 @@ function createResource(resourceType, resourceData) {
   return createResource;
 }
 
+//funkcje pomocnicze
+
 function initializeNextId(resourceType) {
   const resources = findAllResourcesByType(resourceType);
   if (!resources.nextId) {
@@ -593,6 +597,16 @@ function generateNextId(resourceType) {
   return `${resources.nextId++}`;
 }
 
-initDb();
 
-/////////////////////
+
+const db = {
+  initDb,
+  findResourceByIdAndType,
+  findAllResourcesByType,
+  createResource,
+  updateResource,
+  deleteResource
+
+}
+
+module.exports = db;

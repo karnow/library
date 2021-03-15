@@ -257,7 +257,7 @@ function deleteAuthor(id) {
 // console.log(Book);
 // const author = createAuthor({ name: "Wiesław Podlach", bio: "Ksiądz z Amager" })
 // console.log(author);
-
+initDb();
 //inicjalizacja bazy danych i indeksowania nowych recordów
 function revertToInitialData() {
   initDb();
