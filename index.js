@@ -1,8 +1,14 @@
 const {ApolloServer} = require("apollo-server");
 const typeDefs = require("./typeDefs");
 const resolvers = require("./resolvers");
-const dataAccess = require("./dataAccess");
+const db = require("./db");
+const createDataAccess = require("./dataAccess");
 const { Search } = require("./search");
+
+
+
+const dataAccess = createDataAccess(db);
+
 const PORT = process.env.PORT || 4000
 const BASE_ASSETS_URL = process.env.BASE_ASSETS_URL || "http://examples.devmastery.pl/assets";
 

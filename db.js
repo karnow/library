@@ -520,6 +520,8 @@ const initialData= () =>({
 
 let data = {};
 
+initDb();
+
 function initDb() {
   data = initialData();
   initializeNextId("Book");
