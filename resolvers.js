@@ -1,10 +1,6 @@
-const { getBookById, createBookCopy } = require("./db");
-const db = require("./db");
-
-// const {nanoid} = require('nanoid');
-
 // const todbId = externalId => Buffer.from(externalId, "base64").toString();
 // const toExternalId = dbId => Buffer.from(dbId).toString("base64");
+
 const decodeBase64 = base64String =>
   Buffer.from(base64String, "base64").toString();
 const encodeBase64 = rawString => Buffer.from(rawString).toString("base64");
@@ -13,30 +9,30 @@ const toExternalId = (dbId, type) => encodeBase64(`${type}-${dbId}`);
 const toTypeAndDbId = externalId => decodeBase64(externalId).split("-", 2);
 const toDbId = externalId => toTypeAndDbId(externalId)[1];
 
-const getAnythingByExternalId = (externalId, db) => {
-  const [type, dbId] = toTypeAndDbId(externalId);
+const getAnythingByExternalId = (externalId, dataAccess) => {
+const [type, dbId] = toTypeAndDbId(externalId);
 
   switch (type) {
     case "Book": {
-      return db.getBookById(dbId);
+      return dataAccess.getBookById(dbId);
     }
     case "Author": {
-      return db.getAuthorById(dbId);
+      return dataAccess.getAuthorById(dbId);
     }
     case "User": {
-      return db.getUserById(dbId);
+      return dataAccess.getUserById(dbId);
     }
     case "BookCopy": {
-      return db.getBookCopyById(dbId);
+      return dataAccess.getBookCopyById(dbId);
     }
     default: {
       return null;
     }
   }
 }
-const getResourceByExternalId = (externalId, db) => {
+const getResourceByExternalId = (externalId, dataAccess) => {
   const [type, dbId] = toTypeAndDbId(externalId);
-  return db.getResourceByIdAndType(dbId, type)
+  return dataAccess.getResourceByIdAndType(dbId, type)
   
 }
 
@@ -45,58 +41,58 @@ const id = resource => toExternalId(resource.id, resource.resourceType);
 
 const resolvers = {
   Query: {
-    books: (rootValue, { searchQuery }, { db, search }) =>
-    searchQuery.length > 0 ? search.findBooks(searchQuery) : db.getAllBooks(),
-    authors:(rootValue,{ searchQuery } , {db, search}) => 
-    searchQuery.length > 0 ? search.findAuthors(searchQuery) : db.getAllAuthors(),
-    users: (rootValue, { searchQuery }, { db, search }) => 
-    searchQuery.length > 0 ? search.findUsers(searchQuery) : db.getAllUsers(),
+    books: (rootValue, { searchQuery }, { dataAccess, search }) =>
+    searchQuery.length > 0 ? search.findBooks(searchQuery) : dataAccess.getAllBooks(),
+    authors:(rootValue,{ searchQuery } , {dataAccess, search}) => 
+    searchQuery.length > 0 ? search.findAuthors(searchQuery) : dataAccess.getAllAuthors(),
+    users: (rootValue, { searchQuery }, { dataAccess, search }) => 
+    searchQuery.length > 0 ? search.findUsers(searchQuery) : dataAccess.getAllUsers(),
     
-    book:(rootValue,{id}, {db})=> db.getBookById(toDbId(id)),
-    author:(rootValue,{id}, {db})=> db.getAuthorById(toDbId(id)),
-    user:(rootValue,{id}, {db})=> db.getUserById(toDbId(id)),
-    anything:(rootValue,{id}, {db})=> getAnythingByExternalId(id , db),
-    everything:(rootValue,agrs, {db})=> [
-      ...db.getAllBookCopies(),
-      ...db.getAllAuthors(),
-      ...db.getAllUsers(),
-      ...db.getAllBooks()
+    book:(rootValue,{id}, {dataAccess})=> dataAccess.getBookById(toDbId(id)),
+    author:(rootValue,{id}, {dataAccess})=> dataAccess.getAuthorById(toDbId(id)),
+    user:(rootValue,{id}, {dataAccess})=> dataAccess.getUserById(toDbId(id)),
+    anything:(rootValue,{id}, {dataAccess})=> getAnythingByExternalId(id , dataAccess),
+    everything:(rootValue,agrs, {dataAccess})=> [
+      ...dataAccess.getAllBookCopies(),
+      ...dataAccess.getAllAuthors(),
+      ...dataAccess.getAllUsers(),
+      ...dataAccess.getAllBooks()
     ],
-    resources:(rootValue,agrs, {db})=> [
-      ...db.getAllBookCopies(),
-      ...db.getAllAuthors(),
-      ...db.getAllUsers(),
-      ...db.getAllBooks()
+    resources:(rootValue,agrs, {dataAccess})=> [
+      ...dataAccess.getAllBookCopies(),
+      ...dataAccess.getAllAuthors(),
+      ...dataAccess.getAllUsers(),
+      ...dataAccess.getAllBooks()
     ],
-    resource: (rootValue, { id }, { db }) => getResourceByExternalId(id, db),
+    resource: (rootValue, { id }, { dataAccess }) => getResourceByExternalId(id, dataAccess),
 
-    people:(rootValue,agrs, {db})=> [
+    people:(rootValue,agrs, {dataAccess})=> [
       
-      ...db.getAllAuthors(),
-      ...db.getAllUsers(),
+      ...dataAccess.getAllAuthors(),
+      ...dataAccess.getAllUsers(),
       
     ],
   },
   Mutation: {
-    borrowBookCopy: (rootValue, { id }, { db, currentUserDbId }) => {
-      db.borrowBookCopy(toDbId(id), currentUserDbId);
-      return db.getBookCopyById(toDbId(id));
+    borrowBookCopy: (rootValue, { id }, { dataAccess, currentUserDbId }) => {
+      dataAccess.borrowBookCopy(toDbId(id), currentUserDbId);
+      return dataAccess.getBookCopyById(toDbId(id));
     },
-    returnBookCopy:(rootValue, {id}, {db, currentUserDbId}) => {
-      db.returnBookCopy(toDbId(id), currentUserDbId);
-      return db.getBookCopyById(toDbId(id));
+    returnBookCopy:(rootValue, {id}, {dataAccess, currentUserDbId}) => {
+      dataAccess.returnBookCopy(toDbId(id), currentUserDbId);
+      return dataAccess.getBookCopyById(toDbId(id));
     },
-    borrowRandomBook:(rootValue, args, { db, currentUserDbId }) => {
-      const id = db.borrowRandomCopy(currentUserDbId);
+    borrowRandomBook:(rootValue, args, { dataAccess, currentUserDbId }) => {
+      const id = dataAccess.borrowRandomCopy(currentUserDbId);
       console.log(id);
-      return db.getBookCopyById(id);
+      return dataAccess.getBookCopyById(id);
     },
-    createUser: (rootValue, { input }, { db }) => {
+    createUser: (rootValue, { input }, { dataAccess }) => {
       try {
         return {
           success: true,
           message: "User successfully created",
-          user: db.createUser(input)
+          user: dataAccess.createUser(input)
         };
       } catch (error) {
         return {
@@ -105,13 +101,13 @@ const resolvers = {
         };
       }
     },
-    updateUser: (rootValue, { input:{ id, name, info }}, { db }) => {
+    updateUser: (rootValue, { input:{ id, name, info }}, { dataAccess }) => {
       try {
-        db.updateUser(toDbId(id), { name, info });
+        dataAccess.updateUser(toDbId(id), { name, info });
         return {
           success: true,
           message: "User successfully updated",
-          user: db.getUserById(toDbId(id))
+          user: dataAccess.getUserById(toDbId(id))
         };
       } catch (error) { 
         return {
@@ -121,9 +117,9 @@ const resolvers = {
       }
       
     },
-    deleteUser: (rootValue, { id }, { db }) => {
+    deleteUser: (rootValue, { id }, { dataAccess }) => {
       try {
-        db.deleteUser(toDbId(id));
+        dataAccess.deleteUser(toDbId(id));
         return {
           success: true,
           message: "User successfully deleted",
@@ -136,12 +132,12 @@ const resolvers = {
         };
       }      
     },
-    createAuthor: (rootValue, { input }, { db }) => {
+    createAuthor: (rootValue, { input }, { dataAccess }) => {
       try {
         return {
           success: true,
           message: "Author successfully created",
-          author: db.createAuthor(input )
+          author: dataAccess.createAuthor(input )
         };
       } catch (error) {
         return {
@@ -151,13 +147,13 @@ const resolvers = {
       }
       
     },
-    updateAuthor: (rootValue, { input: { id, name, bio } }, { db }) => {
+    updateAuthor: (rootValue, { input: { id, name, bio } }, { dataAccess }) => {
       try {
-        db.updateAuthor(toDbId(id), { name, bio });
+        dataAccess.updateAuthor(toDbId(id), { name, bio });
         return {
           success: true,
           message: "Author successfully updated",
-          author: db.getAuthorById(toDbId(id))
+          author: dataAccess.getAuthorById(toDbId(id))
         };
       } catch (error) { 
         return {
@@ -167,9 +163,9 @@ const resolvers = {
       }
           
     },
-    deleteAuthor: (rootValue, { id }, { db }) => {
+    deleteAuthor: (rootValue, { id }, { dataAccess }) => {
       try {
-        db.deleteAuthor(toDbId(id));
+        dataAccess.deleteAuthor(toDbId(id));
         return {
           success: true,
           message: "Author successfully deleted",
@@ -183,14 +179,14 @@ const resolvers = {
       }    
           
     },
-    createBook: (rootValue, {input:{ author_Id, title, description }}, { db }) => {
+    createBook: (rootValue, {input:{ author_Id, title, description }}, { dataAccess }) => {
       try {
         console.log(author_Id, title, description);
         const authorId = (toDbId(author_Id))
         return {
           success: true,
           message: "Book successfully created",
-          book: db.createBook({authorId, title, description })
+          book: dataAccess.createBook({authorId, title, description })
         };
       } catch (error) {
         return {
@@ -200,13 +196,13 @@ const resolvers = {
       }
            
     },
-    updateBook: (rootValue, { input: { id, title, description } },{db}) => {
+    updateBook: (rootValue, { input: { id, title, description } },{dataAccess}) => {
       try {
-         db.updateBook(toDbId(id), { title, description });
+         dataAccess.updateBook(toDbId(id), { title, description });
         return {
           success: true,
           message: "Book successfully updated",
-          book: getBookById(toDbId(id))
+          book: dataAccess.getBookById(toDbId(id))
         };
       } catch (error) { 
         return {
@@ -216,9 +212,9 @@ const resolvers = {
       }      
     },
 
-    deleteBook: (rootValue, { id }, { db }) => {
+    deleteBook: (rootValue, { id }, { dataAccess }) => {
       try {
-        db.deleteBook(toDbId(id));
+        dataAccess.deleteBook(toDbId(id));
         return {
           success: true,
           message: "Book successfully deleted",
@@ -232,7 +228,7 @@ const resolvers = {
       }    
      
     },
-    createBookCopy: (rootValue, { input: { owner_Id, book_Id, borrower_Id } }, { db }) => {
+    createBookCopy: (rootValue, { input: { owner_Id, book_Id, borrower_Id } }, { dataAccess }) => {
       try {
       const ownerId = (toDbId(owner_Id));
       const bookId = (toDbId(book_Id));
@@ -240,7 +236,7 @@ const resolvers = {
         return {
           success: true,
           message: "BookCopy successfully created",
-          bookcopy: db.createBookCopy({ownerId, bookId, borrowerId})
+          bookcopy: dataAccess.createBookCopy({ownerId, bookId, borrowerId})
         };
       } catch (error) { 
         return {
@@ -250,17 +246,17 @@ const resolvers = {
       }
      
     },
-    updateBookCopy: (rootValue, { input: { id, owner_Id, book_Id, borrower_Id } }, { db }) => {
+    updateBookCopy: (rootValue, { input: { id, owner_Id, book_Id, borrower_Id } }, { dataAccess }) => {
       try {
       const ownerId = (toDbId(owner_Id));
       const bookId = (toDbId(book_Id));
       const borrowerId = (toDbId(borrower_Id));
-      db.updateBookCopy(toDbId(id), { ownerId, bookId, borrowerId });
+      dataAccess.updateBookCopy(toDbId(id), { ownerId, bookId, borrowerId });
         
         return {
           success: true,
           message: "BookCopy successfully updated",
-          bookcopy: db.getBookCopyById(toDbId(id))
+          bookcopy: dataAccess.getBookCopyById(toDbId(id))
         };
       } catch (error) { 
         return {
@@ -270,9 +266,9 @@ const resolvers = {
       }      
            
     },
-    deleteBookCopy: (rootValue, { id }, { db }) => {
+    deleteBookCopy: (rootValue, { id }, { dataAccess }) => {
       try {
-        db.deleteBookCopy(toDbId(id));
+        dataAccess.deleteBookCopy(toDbId(id));
         return {
           success: true,
           message: "BookCopy successfully deleted",
@@ -286,9 +282,9 @@ const resolvers = {
       }    
     
     },
-    resetData: (rootValue, args, { db }) => {
+    resetData: (rootValue, args, { dataAccess }) => {
       try {
-        db.revertToInitialData();
+        dataAccess.revertToInitialData();
         return {
           success: true,
           message: "Successfully restored initial data"
@@ -308,19 +304,19 @@ const resolvers = {
     
     id,
     title: (book) => book.title.toUpperCase(),
-    author: (book, agrs, {db}) => db.getAuthorById(book.authorId),
+    author: (book, agrs, {dataAccess}) => dataAccess.getAuthorById(book.authorId),
     cover: book => ({
       path: book.coverPath
     }),
-    copies: (book, agrs, {db}) =>
-    db.getBookCopiesByBookId(book.id)
+    copies: (book, agrs, {dataAccess}) =>
+    dataAccess.getBookCopiesByBookId(book.id)
      
      
   },
 
   Author: {
     id,
-    books: (author, agrs, {db}) => db.getBooksByAuthorId(author.id),
+    books: (author, agrs, {dataAccess}) => dataAccess.getBooksByAuthorId(author.id),
     photo:author => ({
       path: author.photoPath
     })
@@ -342,17 +338,17 @@ const resolvers = {
       console.log("Someone asks about an email.");
       return user.email;
     },
-    ownedBookCopies: (user, args, { db }) => db.getBookCopiesByOwnerId(user.id),
-    borrowedBookCopies: (user, args, { db }) =>
-      db.getBookCopiesByBorrowerId(user.id)
+    ownedBookCopies: (user, args, { dataAccess }) => dataAccess.getBookCopiesByOwnerId(user.id),
+    borrowedBookCopies: (user, args, { dataAccess }) =>
+      dataAccess.getBookCopiesByBorrowerId(user.id)
   },
 
   BookCopy: {
     id,
-    book: (bookCopy, args, { db }) => db.getBookById(bookCopy.bookId),
-    owner: (bookCopy, args, { db }) => db.getUserById(bookCopy.ownerId),
-    borrower: (bookCopy, args, { db }) =>
-      bookCopy.borrowerId && db.getUserById(bookCopy.borrowerId)
+    book: (bookCopy, args, { dataAccess }) => dataAccess.getBookById(bookCopy.bookId),
+    owner: (bookCopy, args, { dataAccess }) => dataAccess.getUserById(bookCopy.ownerId),
+    borrower: (bookCopy, args, { dataAccess }) =>
+      bookCopy.borrowerId && dataAccess.getUserById(bookCopy.borrowerId)
   },
 
   Anything: {
