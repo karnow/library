@@ -1,11 +1,11 @@
 const {ApolloServer} = require("apollo-server");
 const typeDefs = require("./typeDefs");
 const resolvers = require("./resolvers");
-const initialData = require("./initialData");
-const createDb = require("./db");
+const initialData = require("./config/initialData");
+const createDb = require("./data/db");
 const createDataAccess = require("./dataAccess");
-const searchFieldsByType = require("./searchFieldsByType");
-const { Search } = require("./search");
+const searchFieldsByType = require("./config/searchFieldsByType");
+const { Search } = require("./data/search");
 
 
 const db = createDb(initialData);
