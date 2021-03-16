@@ -1,12 +1,13 @@
 const {ApolloServer} = require("apollo-server");
 const typeDefs = require("./typeDefs");
 const resolvers = require("./resolvers");
-const db = require("./db");
+const initialData = require("./initialData");
+const createDb = require("./db");
 const createDataAccess = require("./dataAccess");
 const { Search } = require("./search");
 
 
-
+const db = createDb(initialData);
 const dataAccess = createDataAccess(db);
 
 const PORT = process.env.PORT || 4000
