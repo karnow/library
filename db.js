@@ -9,11 +9,7 @@ function createDb(initialData) {
   function initDb() {
     data = initialData();
     Object.keys(data).forEach(resourceType => { initializeNextId(resourceType); console.log(resourceType) })
-    
-    // initializeNextId("Book");
-    // initializeNextId("Author");
-    // initializeNextId("User");
-    // initializeNextId("BookCopy");
+       
   }
 
   //nisko poziomowe funkcje możemy jest traktować jako zapytania np sql
