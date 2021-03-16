@@ -42,11 +42,11 @@ const id = resource => toExternalId(resource.id, resource.resourceType);
 const resolvers = {
   Query: {
     books: (rootValue, { searchQuery }, { dataAccess, search }) =>
-    searchQuery.length > 0 ? search.findBooks(searchQuery) : dataAccess.getAllBooks(),
+    searchQuery.length > 0 ? search.findResources(searchQuery, "Book") : dataAccess.getAllBooks(),
     authors:(rootValue,{ searchQuery } , {dataAccess, search}) => 
-    searchQuery.length > 0 ? search.findAuthors(searchQuery) : dataAccess.getAllAuthors(),
+    searchQuery.length > 0 ? search.findResources(searchQuery, "Author") : dataAccess.getAllAuthors(),
     users: (rootValue, { searchQuery }, { dataAccess, search }) => 
-    searchQuery.length > 0 ? search.findUsers(searchQuery) : dataAccess.getAllUsers(),
+    searchQuery.length > 0 ? search.findResources(searchQuery, "User") : dataAccess.getAllUsers(),
     
     book:(rootValue,{id}, {dataAccess})=> dataAccess.getBookById(toDbId(id)),
     author:(rootValue,{id}, {dataAccess})=> dataAccess.getAuthorById(toDbId(id)),

@@ -1,73 +1,39 @@
 const lunr = require("lunr");
 
-function initBooksIndex(db) {
+function initIndex(db, searchFields, resourceType) {
   return lunr(function() {
     this.ref("id");
-    this.field("title", { boost: 10 });
-    this.field("description");
-    db.getAllBooks().forEach(function(book) {
+    searchFields.forEach(([name, options]) => {
+      this.field(name, options);
+    });
+      db.findAllResourcesByType(resourceType).forEach(function(book) {
       this.add(book);
     }, this);
   });
 }
 
-function initUsersIndex(db) {
-  return lunr(function() {
-    this.ref("id");
-    this.field("name" );
-    this.field("email");
-    this.field("info");
-    db.getAllUsers().forEach(function(user) {
-      this.add(user);
-    }, this);
-  });
-}
-function initAuthorIndex(db) {
-  return lunr(function() {
-    this.ref("id");
-    this.field("name" );
-    this.field("bio");
-    db.getAllAuthors().forEach(function(author) {
-      this.add(author);
-    }, this);
-  });
-}
 
 class Search {
-  constructor(db) {
+  constructor(db, searchFieldsByType) {
     this.db = db;
-    this.booksIndex = initBooksIndex(this.db);
-    this.usersIndex = initUsersIndex(this.db);
-    this.authorsIndex = initAuthorIndex(this.db);
+    this.searchFieldsByType = searchFieldsByType;
+    this.indices = {},
+      Object.entries(this.searchFieldsByType).forEach(([resourceType, searchFields]) => {
+        this.indices[resourceType] = initIndex(this.db, searchFields, resourceType);
+    })
   }
 
-  findBooks(searchQuery) {
+  findResources(searchQuery, resourceType) {
+    if (!this.indices[resourceType]) {
+      throw new Error(`index for this resource type does not exists '${resourceType}`);
+    }
     const results = [];
-    this.booksIndex
+    this.indices[resourceType]
       .search(searchQuery)
-      .forEach(result => results.push(this.db.getBookById(result.ref)));
-     
-    return results;
-  }
-
-  findUsers(searchQuery) {
-    const results = [];
-    this.usersIndex
-      .search(searchQuery)
-      .forEach(result => results.push(this.db.getUserById(result.ref)));
-      
+      .forEach(result => results.push(this.db.findResourceByIdAndType(result.ref, resourceType)));
     return results;
   }
   
-  findAuthors(searchQuery) {
-    const results = [];
-    this.authorsIndex
-      .search(searchQuery)
-      .forEach(result => results.push(this.db.getAuthorById(result.ref)));
-      
-    return results;
-  }
-
 }
 
 module.exports = {
