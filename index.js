@@ -4,11 +4,15 @@ const resolvers = require("./resolvers");
 const initialData = require("./config/initialData");
 const createDb = require("./data/db");
 const createDataAccess = require("./dataAccess");
+const searchFieldsByType = require("./config/searchFieldsByType");
+const { Search } = require("./data/search");
 
 
 
 const db = createDb(initialData);
-const dataAccess = createDataAccess(db);
+const search = new Search(db, searchFieldsByType);
+
+const dataAccess = createDataAccess(db, search);
 
 
 const PORT = process.env.PORT || 4000

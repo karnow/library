@@ -1,7 +1,7 @@
-const searchFieldsByType = require("./config/searchFieldsByType");
-const { Search } = require("./data/search");
+// const searchFieldsByType = require("./config/searchFieldsByType");
+// const { Search } = require("./data/search");
 
-function createDataAccess(db) {
+function createDataAccess(db, search) {
 
     //query
     const getResourceByIdAndType = (id, type) => {
@@ -254,19 +254,33 @@ function createDataAccess(db) {
   
     }
 ///search functions
+    function searchResources(searchQuery, resourceType) {
+    return searchQuery.length > 0
+      ? search.findResources(searchQuery, resourceType)
+      : getAllResourcesByType(resourceType);
+    }
+
+    const searchBooks = (searchQuery = "") =>
+        searchResources(searchQuery, "Book");
     
-    function searchBooks(searchQuery) {
-        const search = new Search(db, searchFieldsByType);
-        return search.findResources(searchQuery, "Book")
-    }
-    function searchAuthors(searchQuery) {
-        const search = new Search(db, searchFieldsByType);
-        return search.findResources(searchQuery, "Author")
-    }
-    function searchUsers(searchQuery) {
-        const search = new Search(db, searchFieldsByType);
-        return search.findResources(searchQuery, "User")
-    }
+    const searchAuthors = (searchQuery = "") =>
+    searchResources(searchQuery, "Author");
+    
+    const searchUsers = (searchQuery = "") =>
+    searchResources(searchQuery, "User");
+    
+    // function searchBooks(searchQuery) {
+    //     const search = new Search(db, searchFieldsByType);
+    //     return search.findResources(searchQuery, "Book")
+    // }
+    // function searchAuthors(searchQuery) {
+    //     const search = new Search(db, searchFieldsByType);
+    //     return search.findResources(searchQuery, "Author")
+    // }
+    // function searchUsers(searchQuery) {
+    //     const search = new Search(db, searchFieldsByType);
+    //     return search.findResources(searchQuery, "User")
+    // }
 
     
 
