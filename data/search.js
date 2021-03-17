@@ -16,11 +16,37 @@ function initIndex(db, searchFields, resourceType) {
 class Search {
   constructor(db, searchFieldsByType) {
     this.db = db;
+    db.registerListener(this); //przekazanie instancji obiektu search
     this.searchFieldsByType = searchFieldsByType;
+    this.rebulidAllIndices();
+    
+  }
+
+  rebulidAllIndices() {
     this.indices = {},
-      Object.entries(this.searchFieldsByType).forEach(([resourceType, searchFields]) => {
-        this.indices[resourceType] = initIndex(this.db, searchFields, resourceType);
+      Object.keys(this.searchFieldsByType).forEach((resourceType) => {
+        this.rebulidIndex(resourceType);
     })
+  }
+
+  onDbChange(change, resourceType, id) {
+    if (change === "init") {
+      this.rebulidAllIndices();
+    }
+    if (!this.searchFieldsByType[resourceType]) {
+      console.info("Change event ignored - unsupported resource type", change, resourceType, id);
+      return;
+    }
+    this.rebulidIndex(resourceType);
+
+    console.log(change, resourceType, id);
+  }
+  rebulidIndex(resourceType) {
+    const searchFields = this.searchFieldsByType[resourceType];
+    if (!searchFields) {
+      throw new Error(`Search fields are not defined for this resource type '${resourceType}`);
+    }
+    this.indices[resourceType] = initIndex(this.db, searchFields, resourceType);
   }
 
   findResources(searchQuery, resourceType) {

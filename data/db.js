@@ -4,12 +4,22 @@ function createDb(initialData) {
 
   let data = {};
 
+  const listeners = [];
+
+  function registerListener(listener) {
+    listeners.push(listener);
+  }
+
+  function notifyAboutChange(change, resourceType, id) {
+    listeners.forEach(listener => listener.onDbChange(change, resourceType, id));
+  }
+
   initDb();
 
   function initDb() {
     data = initialData();
     Object.keys(data).forEach(resourceType => { initializeNextId(resourceType); console.log(resourceType) })
-       
+    notifyAboutChange("init");
   }
 
   //nisko poziomowe funkcje możemy jest traktować jako zapytania np sql
@@ -38,6 +48,7 @@ function createDb(initialData) {
     if (index < 0) {
       throw new Error(`Could not find resource by id '${id}`);
     }
+    notifyAboutChange("delete", resourceType, id);
     resources.splice(index, 1);
   }
 
@@ -54,6 +65,7 @@ function createDb(initialData) {
       id,
       resourceType
     }
+    notifyAboutChange("update", resourceType, id);
   }
 
   function createResource(resourceType, resourceData) {
@@ -65,6 +77,7 @@ function createDb(initialData) {
       id
     };
     resources.push(createResource);
+    notifyAboutChange("create", resourceType, id);
     return createResource;
   }
 
@@ -89,7 +102,8 @@ function createDb(initialData) {
     findAllResourcesByType,
     createResource,
     updateResource,
-    deleteResource
+    deleteResource,
+    registerListener
 
   }
   return db;
