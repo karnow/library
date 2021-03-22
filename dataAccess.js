@@ -1,7 +1,9 @@
 // const searchFieldsByType = require("./config/searchFieldsByType");
 // const { Search } = require("./data/search");
 
-function createDataAccess(db, search) {
+const { hashPassword } = require("./data/auth");
+
+function createDataAccess(db, search, auth) {
 
     //query
     const getResourceByIdAndType = (id, type) => {
@@ -115,14 +117,18 @@ function createDataAccess(db, search) {
 
 
     function updateUser(id, userData) {
-        const { name, info } = userData;
+        const { name, info, password } = userData;
         if (!name || name.length < 0) {
             throw new Error(`user needs valid name and cannot be empty `);
         }
         if (!info || info.length < 0) {
             throw new Error(`user needs calid info cannot be empty `);
         }
-        db.updateResource(id, "User", { name, info });
+        if (!password || password.length < 5) {
+            throw new Error("User needs longer password");
+        }
+        const passwordHash = auth.hashPassword(password);
+        db.updateResource(id, "User", { name, info, passwordHash });
     }
 
 
@@ -151,7 +157,7 @@ function createDataAccess(db, search) {
     const VALID_AVATAR_COLORS = ["red", "green", "blue", "yellow", "magenta", "pink", "black"];
 
     function createUser(userData) {
-        const { name, email, info } = userData;
+        const { name, email, info, password } = userData;
         if (!name || name.length < 1) {
             throw new Error("User needs valid name");
         }
@@ -161,12 +167,18 @@ function createDataAccess(db, search) {
         if (!info || info.length < 1) {
             throw new Error("User needs valid info");
         }
+        if (!password || password.length < 5) {
+            throw new Error("User needs longer password");
+        }
         const color = VALID_AVATAR_COLORS[Math.floor(Math.random() * VALID_AVATAR_COLORS.length)];
         const avatarName = `${Math.random() > 0.5 ? "m" : "w"}${Math.ceil(Math.random() * 25)}`
+        const passwordHash = auth.hashPassword(password);
+        console.log(password, passwordHash);
         return db.createResource("User", {
             name,
             email,
             info,
+            passwordHash,
             avatar: {
                 imagePath: `/images/avatars/${avatarName}.png`,
                 color

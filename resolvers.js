@@ -101,9 +101,9 @@ const resolvers = {
         };
       }
     },
-    updateUser: (rootValue, { input:{ id, name, info }}, { dataAccess }) => {
+    updateUser: (rootValue, { input:{ id, name, info, password }}, { dataAccess }) => {
       try {
-        dataAccess.updateUser(toDbId(id), { name, info });
+        dataAccess.updateUser(toDbId(id), { name, info, password });
         return {
           success: true,
           message: "User successfully updated",

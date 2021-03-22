@@ -6,13 +6,14 @@ const createDb = require("./data/db");
 const createDataAccess = require("./dataAccess");
 const searchFieldsByType = require("./config/searchFieldsByType");
 const { Search } = require("./data/search");
+const auth = require("./data/auth");
 
 
 
 const db = createDb(initialData);
 const search = new Search(db, searchFieldsByType);
 
-const dataAccess = createDataAccess(db, search);
+const dataAccess = createDataAccess(db, search, auth);
 
 
 const PORT = process.env.PORT || 4000

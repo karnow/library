@@ -78,11 +78,13 @@ input CreateUserInput {
     name: String!
     email: String!
     info: String!
+    password: String!
 }
 input UpdateUserInput {
     id: ID!
     name: String!
     info: String!
+    password: String!
 }
 
 type BookCopyMutationResult implements MutationResult{
@@ -158,6 +160,7 @@ type User implements Resource & Person {
     id: ID!,
     name: String!,
     email: String!
+    passwordHash: String!
     info: String!,
     avatar:Avatar!,
     ownedBookCopies: [BookCopy!]!
