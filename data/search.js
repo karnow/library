@@ -55,8 +55,9 @@ class Search {
     }
     const results = [];
     this.indices[resourceType]
-      .search(searchQuery)
+    .search(searchQuery)
       .forEach(result => results.push(this.db.findResourceByIdAndType(result.ref, resourceType)));
+   
     return results;
   }
   
