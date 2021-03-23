@@ -23,13 +23,18 @@ function createDb(initialData) {
   }
 
   //nisko poziomowe funkcje możemy jest traktować jako zapytania np sql
-  function findResourceByIdAndType(id, resourceType) {
+
+  function findResourceByFieldAndType(fieldValue, fieldName, resourceType) {
     const resources = findAllResourcesByType(resourceType);
-    const resource = resources.find(resource => resource.id === id);
+    const resource = resources.find(resource => resource[fieldName] === fieldValue);
     if (!resource) {
-      throw new Error(`Could not find resource by id '${id}`)
+      throw new Error(`Could not find resource by ${fieldName} '${fieldValue}`)
     }
     return resource;
+  }
+
+  function findResourceByIdAndType(id, resourceType) {
+    findResourceByFieldAndType(id, "id", resourceType)
   }
 
   function findAllResourcesByType(resourceType) {
@@ -98,6 +103,7 @@ function createDb(initialData) {
 
   const db = {
     initDb,
+    findResourceByFieldAndType,
     findResourceByIdAndType,
     findAllResourcesByType,
     createResource,

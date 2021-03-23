@@ -6,7 +6,7 @@ function hashPassword(password) {
 }
 
 function isPasswordCorrect(password, hash) {
-    return bcrypt.campareSync(password, hash)
+    return bcrypt.compareSync(password, hash)
 }
 
 const auth = {

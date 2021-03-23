@@ -1,7 +1,7 @@
 // const searchFieldsByType = require("./config/searchFieldsByType");
 // const { Search } = require("./data/search");
 
-const { hashPassword } = require("./data/auth");
+
 
 function createDataAccess(db, search, auth) {
 
@@ -186,6 +186,20 @@ function createDataAccess(db, search, auth) {
         });
     }
 
+    function logIn(email, password) {
+        try {
+            const user = db.findResourceByFieldAndType(email, "email", "User");
+            
+            if (!auth.isPasswordCorrect(password, user.passwordHash)) {
+                throw new Error("Invalid password")
+            }
+        } catch (error) {
+            console.info("Error while trying to log in: ", error.message);
+            throw new Error("Invalid email or password")
+        }
+
+    }
+
     function createBookCopy(bookCopyData) {
         const { ownerId, bookId, borrowerId } = bookCopyData;
         if (!getUserById(ownerId)) {
@@ -321,6 +335,7 @@ function createDataAccess(db, search, auth) {
         updateUser,
         createUser,
         searchUsers,
+        logIn,
  
   
         getBooksByAuthorId,

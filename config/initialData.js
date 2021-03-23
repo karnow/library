@@ -305,7 +305,7 @@ const initialData= () =>({
       resourceType: "User",
       name: "Alice",
       email: "alice@example.com",
-      passwordHash: "$2b$10$qD4lMpADr8tiN3.LqZMr5O4.PdvcURym4irt2xtgXERWcm.pUuqUi",
+      passwordHash: "$2b$10$m3W0g4NWnCIHrBGOCfZMJuDld1w120SoCIcKAY4WQtSryT/yliECG",
       info: `Food scholar. Incurable tv fanatic. Reader. Typical zombie buff. Gamer. Lifelong creator. Certified organizer.`,
       avatar: {
         imagePath: "/images/avatars/w13.png",
@@ -317,7 +317,7 @@ const initialData= () =>({
       resourceType: "User",
       name: "Bob",
       email: "bob@example.com",
-      passwordHash: "$2b$10$qD4lMpADr8tiN3.LqZMr5O4.PdvcURym4irt2xtgXERWcm.pUuqUi",
+      passwordHash: "$2b$10$m3W0g4NWnCIHrBGOCfZMJuDld1w120SoCIcKAY4WQtSryT/yliECG",
       info: `Twitter fan. Social media expert. Hardcore explorer. Communicator. Amateur coffee lover.`,
       avatar: {
         imagePath: "/images/avatars/m10.png",
@@ -329,7 +329,7 @@ const initialData= () =>({
       resourceType: "User",
       name: "Celine",
       email: "celine@example.com",
-      passwordHash: "$2b$10$qD4lMpADr8tiN3.LqZMr5O4.PdvcURym4irt2xtgXERWcm.pUuqUi",
+      passwordHash: "$2b$10$m3W0g4NWnCIHrBGOCfZMJuDld1w120SoCIcKAY4WQtSryT/yliECG",
       info: `Wannabe pop culture specialist. Tv scholar. Lifelong social media practitioner. Music geek. Falls down a lot.`,
       avatar: {
         imagePath: "/images/avatars/w2.png",

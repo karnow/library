@@ -296,7 +296,22 @@ const resolvers = {
           message: error.message
         };
       }       
-    }
+    },
+    logIn: (rootValue, { input:{email, password} }, { dataAccess }) => {
+      try {
+        dataAccess.logIn(email, password)
+        return {
+          success: true,
+          message: "You've successfully logged in",
+          
+        };
+      } catch (error) {
+        return {
+          success: false,
+          message: error.message
+        };
+      }
+    },
 
   },
 
