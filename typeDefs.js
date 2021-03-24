@@ -96,6 +96,7 @@ input UpdateUserInput {
 type LogInResult implements MutationResult {
     success: Boolean!
     message: String!
+    token: String
     
 }
 type BookCopyMutationResult implements MutationResult{

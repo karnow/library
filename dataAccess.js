@@ -193,6 +193,7 @@ function createDataAccess(db, search, auth) {
             if (!auth.isPasswordCorrect(password, user.passwordHash)) {
                 throw new Error("Invalid password")
             }
+            return auth.generateAuthorizationToken(user);
         } catch (error) {
             console.info("Error while trying to log in: ", error.message);
             throw new Error("Invalid email or password")

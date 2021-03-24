@@ -299,11 +299,11 @@ const resolvers = {
     },
     logIn: (rootValue, { input:{email, password} }, { dataAccess }) => {
       try {
-        dataAccess.logIn(email, password)
+        const token = dataAccess.logIn(email, password)
         return {
           success: true,
           message: "You've successfully logged in",
-          
+          token
         };
       } catch (error) {
         return {
