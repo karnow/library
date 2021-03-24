@@ -84,7 +84,7 @@ const resolvers = {
     },
     borrowRandomBook:(rootValue, args, { dataAccess, currentUserDbId }) => {
       const id = dataAccess.borrowRandomCopy(currentUserDbId);
-      console.log(id);
+      console.log("to ja",id);
       return dataAccess.getBookCopyById(id);
     },
     createUser: (rootValue, { input }, { dataAccess }) => {

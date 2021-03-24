@@ -34,7 +34,7 @@ function createDb(initialData) {
   }
 
   function findResourceByIdAndType(id, resourceType) {
-    findResourceByFieldAndType(id, "id", resourceType)
+    return findResourceByFieldAndType(id, "id", resourceType)
   }
 
   function findAllResourcesByType(resourceType) {
