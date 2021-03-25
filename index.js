@@ -19,10 +19,10 @@ const dataAccess = createDataAccess(db, search, auth);
 const PORT = process.env.PORT || 4000
 const BASE_ASSETS_URL = process.env.BASE_ASSETS_URL || "http://examples.devmastery.pl/assets";
 function context({ req }) {
-    console.log(req.headers)
+    
     return {
           dataAccess,
-          currentUserDbId: req.headers['x-current-user-db-id'],          
+          currentUserDbId: auth.authenticateRequest(req, db),          
           assetsBaseUrl: BASE_ASSETS_URL
     }
 }

@@ -25,11 +25,33 @@ function getUserIdFromToken(token) {
     return payload.sub
 }
 
+function authenticateRequest(req, db) {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+        return null;
+    }
+    if (!authHeader.startsWith("Bearer ")) {
+        console.log("Invalid header")
+        return null;
+    }
+    const token = authHeader.substring(7, authHeader.length);
+    try {
+        const userId = getUserIdFromToken(token);
+        db.findResourceByIdAndType(userId, "User"); //dany uzytkownik istnieje w bazie danych
+        return userId;
+    } catch (error) {
+        console.info(error);
+        return null;
+    }
+    
+}
+
 const auth = {
     hashPassword,
     isPasswordCorrect,
     generateAuthorizationToken,
-    getUserIdFromToken
+    getUserIdFromToken,
+    authenticateRequest
 };
 
 module.exports = auth;
