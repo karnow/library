@@ -17,7 +17,8 @@ type Query {
     everything:[Anything!]! @ deprecated(reason: "No longer sapported. Use resources instead"),
     resource(id: ID!): Resource,
     resources:[Resource!]!,
-    people:[Person!]!
+    people:[Person!]!,
+    currentUser: CurrentUser
 }
 type Mutation {
     borrowBookCopy(id: ID!): BookCopy!
@@ -171,7 +172,6 @@ type Book implements Resource {
 type User implements Resource & Person {
     id: ID!,
     name: String!,
-    email: String!
     passwordHash: String!
     info: String!,
     avatar:Avatar!,
@@ -179,6 +179,14 @@ type User implements Resource & Person {
     borrowedBookCopies: [BookCopy!]!
 
 }
+type CurrentUser implements Resource {
+    id: ID!
+    name: String!
+    email: String!
+    info: String!
+    avatar:Avatar!
+}
+
 type Image {
     url:String!
 }

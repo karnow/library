@@ -72,6 +72,9 @@ const resolvers = {
       ...dataAccess.getAllUsers(),
       
     ],
+    currentUser: (rootValue, args, { dataAccess, currentUserDbId }) => 
+      dataAccess.getUserById(currentUserDbId)
+    
   },
   Mutation: {
     borrowBookCopy: (rootValue, { id }, { dataAccess, currentUserDbId }) => {
@@ -349,10 +352,6 @@ const resolvers = {
 
   User: {
     id,
-    email: user => {
-      console.log("Someone asks about an email.");
-      return user.email;
-    },
     ownedBookCopies: (user, args, { dataAccess }) => dataAccess.getBookCopiesByOwnerId(user.id),
     borrowedBookCopies: (user, args, { dataAccess }) =>
       dataAccess.getBookCopiesByBorrowerId(user.id)
