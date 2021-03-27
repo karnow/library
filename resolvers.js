@@ -35,6 +35,12 @@ const getResourceByExternalId = (externalId, dataAccess) => {
   return dataAccess.getResourceByIdAndType(dbId, type)
   
 }
+//funkcja autoryzujaca dostep
+function requireAuthorizedUser(currentUserDbId) {
+  if (!currentUserDbId) {
+    throw new Error("Unauthorized access. Please Log in");
+  }
+}
 
 const id = resource => toExternalId(resource.id, resource.resourceType);
 
@@ -78,14 +84,20 @@ const resolvers = {
   },
   Mutation: {
     borrowBookCopy: (rootValue, { id }, { dataAccess, currentUserDbId }) => {
+      requireAuthorizedUser(currentUserDbId);
+      
       dataAccess.borrowBookCopy(toDbId(id), currentUserDbId);
       return dataAccess.getBookCopyById(toDbId(id));
     },
-    returnBookCopy:(rootValue, {id}, {dataAccess, currentUserDbId}) => {
+    returnBookCopy: (rootValue, { id }, { dataAccess, currentUserDbId }) => {
+      requireAuthorizedUser(currentUserDbId);
+
       dataAccess.returnBookCopy(toDbId(id), currentUserDbId);
       return dataAccess.getBookCopyById(toDbId(id));
     },
-    borrowRandomBook:(rootValue, args, { dataAccess, currentUserDbId }) => {
+    borrowRandomBook: (rootValue, args, { dataAccess, currentUserDbId }) => {
+      requireAuthorizedUser(currentUserDbId);
+      
       const id = dataAccess.borrowRandomCopy(currentUserDbId);
       console.log("to ja",id);
       return dataAccess.getBookCopyById(id);
