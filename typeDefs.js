@@ -181,6 +181,7 @@ type User implements Resource & Person {
 }
 type CurrentUser implements Resource {
     id: ID!
+    isAdmin: Boolean!
     name: String!
     email: String!
     info: String!

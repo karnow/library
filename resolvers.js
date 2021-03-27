@@ -35,10 +35,18 @@ const getResourceByExternalId = (externalId, dataAccess) => {
   return dataAccess.getResourceByIdAndType(dbId, type)
   
 }
-//funkcja autoryzujaca dostep
+//funkcje autoryzujace dostep
 function requireAuthorizedUser(currentUserDbId) {
   if (!currentUserDbId) {
     throw new Error("Unauthorized access. Please Log in");
+  }
+}
+
+function requireAuthorizedAdmin(currentUserDbId, dataAccess) {
+  requireAuthorizedUser(currentUserDbId);
+  const currentUser = dataAccess.getUserById(currentUserDbId);
+  if (!currentUser.isAdmin) {
+    throw new Error("Unauthorized access. Please Log in as Admin");
   }
 }
 
@@ -102,7 +110,8 @@ const resolvers = {
       console.log("to ja",id);
       return dataAccess.getBookCopyById(id);
     },
-    createUser: (rootValue, { input }, { dataAccess }) => {
+    createUser: (rootValue, { input }, { dataAccess ,currentUserDbId}) => {
+      requireAuthorizedAdmin(currentUserDbId, dataAccess);
       try {
         return {
           success: true,
@@ -116,7 +125,8 @@ const resolvers = {
         };
       }
     },
-    updateUser: (rootValue, { input:{ id, name, info, password }}, { dataAccess }) => {
+    updateUser: (rootValue, { input: { id, name, info, password } }, { dataAccess,currentUserDbId }) => {
+      requireAuthorizedAdmin(currentUserDbId, dataAccess);
       try {
         dataAccess.updateUser(toDbId(id), { name, info, password });
         return {
@@ -132,7 +142,8 @@ const resolvers = {
       }
       
     },
-    deleteUser: (rootValue, { id }, { dataAccess }) => {
+    deleteUser: (rootValue, { id }, { dataAccess, currentUserDbId }) => {
+       requireAuthorizedAdmin(currentUserDbId, dataAccess);
       try {
         dataAccess.deleteUser(toDbId(id));
         return {
@@ -147,7 +158,8 @@ const resolvers = {
         };
       }      
     },
-    createAuthor: (rootValue, { input }, { dataAccess }) => {
+    createAuthor: (rootValue, { input }, { dataAccess, currentUserDbId }) => {
+       requireAuthorizedAdmin(currentUserDbId, dataAccess);
       try {
         return {
           success: true,
@@ -162,7 +174,8 @@ const resolvers = {
       }
       
     },
-    updateAuthor: (rootValue, { input: { id, name, bio } }, { dataAccess }) => {
+    updateAuthor: (rootValue, { input: { id, name, bio } }, { dataAccess, currentUserDbId }) => {
+      requireAuthorizedAdmin(currentUserDbId, dataAccess);
       try {
         dataAccess.updateAuthor(toDbId(id), { name, bio });
         return {
@@ -178,7 +191,8 @@ const resolvers = {
       }
           
     },
-    deleteAuthor: (rootValue, { id }, { dataAccess }) => {
+    deleteAuthor: (rootValue, { id }, { dataAccess,currentUserDbId }) => {
+      requireAuthorizedAdmin(currentUserDbId, dataAccess);
       try {
         dataAccess.deleteAuthor(toDbId(id));
         return {
@@ -194,7 +208,8 @@ const resolvers = {
       }    
           
     },
-    createBook: (rootValue, {input:{ author_Id, title, description }}, { dataAccess }) => {
+    createBook: (rootValue, { input: { author_Id, title, description } }, { dataAccess, currentUserDbId }) => {
+      requireAuthorizedAdmin(currentUserDbId, dataAccess);
       try {
         console.log(author_Id, title, description);
         const authorId = (toDbId(author_Id))
@@ -211,7 +226,8 @@ const resolvers = {
       }
            
     },
-    updateBook: (rootValue, { input: { id, title, description } },{dataAccess}) => {
+    updateBook: (rootValue, { input: { id, title, description } }, { dataAccess, currentUserDbId }) => {
+      requireAuthorizedAdmin(currentUserDbId, dataAccess);
       try {
          dataAccess.updateBook(toDbId(id), { title, description });
         return {
@@ -227,7 +243,8 @@ const resolvers = {
       }      
     },
 
-    deleteBook: (rootValue, { id }, { dataAccess }) => {
+    deleteBook: (rootValue, { id }, { dataAccess, currentUserDbId }) => {
+      requireAuthorizedAdmin(currentUserDbId, dataAccess);
       try {
         dataAccess.deleteBook(toDbId(id));
         return {
@@ -243,7 +260,8 @@ const resolvers = {
       }    
      
     },
-    createBookCopy: (rootValue, { input: { owner_Id, book_Id, borrower_Id } }, { dataAccess }) => {
+    createBookCopy: (rootValue, { input: { owner_Id, book_Id, borrower_Id } }, { dataAccess,currentUserDbId }) => {
+      requireAuthorizedAdmin(currentUserDbId, dataAccess);
       try {
       const ownerId = (toDbId(owner_Id));
       const bookId = (toDbId(book_Id));
@@ -261,7 +279,8 @@ const resolvers = {
       }
      
     },
-    updateBookCopy: (rootValue, { input: { id, owner_Id, book_Id, borrower_Id } }, { dataAccess }) => {
+    updateBookCopy: (rootValue, { input: { id, owner_Id, book_Id, borrower_Id } }, { dataAccess, currentUserDbId }) => {
+     requireAuthorizedAdmin(currentUserDbId, dataAccess);
       try {
       const ownerId = (toDbId(owner_Id));
       const bookId = (toDbId(book_Id));
@@ -281,7 +300,8 @@ const resolvers = {
       }      
            
     },
-    deleteBookCopy: (rootValue, { id }, { dataAccess }) => {
+    deleteBookCopy: (rootValue, { id }, { dataAccess,currentUserDbId }) => {
+       requireAuthorizedAdmin(currentUserDbId, dataAccess);
       try {
         dataAccess.deleteBookCopy(toDbId(id));
         return {
@@ -297,7 +317,8 @@ const resolvers = {
       }    
     
     },
-    resetData: (rootValue, args, { dataAccess }) => {
+    resetData: (rootValue, args, { dataAccess, currentUserDbId }) => {
+      requireAuthorizedAdmin(currentUserDbId, dataAccess);
       try {
         dataAccess.revertToInitialData();
         return {
@@ -328,6 +349,9 @@ const resolvers = {
       }
     },
 
+  },
+  CurrentUser: {
+    isAdmin: currentUser =>!!currentUser.isAdmin
   },
 
   Book: {

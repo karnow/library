@@ -303,6 +303,7 @@ const initialData= () =>({
     {
       id: "1",
       resourceType: "User",
+      isAdmin: true,
       name: "Alice",
       email: "alice@example.com",
       passwordHash: "$2b$10$m3W0g4NWnCIHrBGOCfZMJuDld1w120SoCIcKAY4WQtSryT/yliECG",
