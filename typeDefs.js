@@ -37,6 +37,7 @@ type Mutation {
     updateBookCopy(input: UpdateBookCopyInput!):BookCopyMutationResult!
     deleteBookCopy(id: ID!): DeleteBookCopyMutationResult!
     logIn(input: LogInInput!): LogInResult!
+    signUp(input: SignInInput):SignUpResult!
     resetData: ResetMutationResult!
 
 }
@@ -45,6 +46,18 @@ union Anything = Author | Book | User | BookCopy
 interface MutationResult {
     success: Boolean!
     message: String!
+}
+input SignInInput {
+    name: String!
+    email: String!
+    password: String!
+    info: String! = "I'll tell you more about me later..."
+}
+type SignUpResult implements MutationResult {
+    success: Boolean!
+    message: String!
+    token: String!
+    currentUser: CurrentUser
 }
 input LogInInput{
     email: String!
@@ -98,6 +111,7 @@ type LogInResult implements MutationResult {
     success: Boolean!
     message: String!
     token: String
+    currentUser: CurrentUser
     
 }
 type BookCopyMutationResult implements MutationResult{

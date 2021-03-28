@@ -70,7 +70,7 @@ const resolvers = {
       ...dataAccess.getAllBookCopies(),
       ...dataAccess.getAllAuthors(),
       ...dataAccess.getAllUsers(),
-      ...dataAccess.getAllBooks()
+      ...dataAccess.getAllBooks() 
     ],
     resources:(rootValue,agrs, {dataAccess})=> [
       ...dataAccess.getAllBookCopies(),
@@ -335,11 +335,12 @@ const resolvers = {
     },
     logIn: (rootValue, { input:{email, password} }, { dataAccess }) => {
       try {
-        const token = dataAccess.logIn(email, password)
+        const { token, currentUser } = dataAccess.logIn(email, password)
         return {
           success: true,
           message: "You've successfully logged in",
-          token
+          token,
+          currentUser
         };
       } catch (error) {
         return {
@@ -348,8 +349,27 @@ const resolvers = {
         };
       }
     },
-
+    
+    signUp: (rootValue, { input }, { dataAccess ,currentUserDbId}) => {
+        
+      try {
+        dataAccess.createUser(input);
+        const { token, currentUser } = dataAccess.logIn(input.email, input.password);
+          return {
+            success: true,
+            message: "You've successfully signed up",
+            token,
+            currentUser
+           };
+        } catch (error) {
+          return {
+            success: false,
+            message: error.message
+          };
+        }
+    },
   },
+  
   CurrentUser: {
     isAdmin: currentUser =>!!currentUser.isAdmin
   },
