@@ -43,6 +43,7 @@ function requireAuthorizedUser(currentUserDbId) {
 }
 
 function requireAuthorizedAdmin(currentUserDbId, dataAccess) {
+  console.log(currentUserDbId);
   requireAuthorizedUser(currentUserDbId);
   const currentUser = dataAccess.getUserById(currentUserDbId);
   if (!currentUser.isAdmin) {

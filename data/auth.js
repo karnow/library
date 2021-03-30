@@ -11,16 +11,16 @@ function isPasswordCorrect(password, hash) {
 }
 const SECRET_KEY = "KAROL NOWAKOWSKI"
 function generateAuthorizationToken(user) {
-    const userDetal = {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        info: user.info,
-        avatar: user.avatar
-    }
+    // const userDetal = {
+    //     id: user.id,
+    //     name: user.name,
+    //     email: user.email,
+    //     info: user.info,
+    //     avatar: user.avatar
+    // }
     const payload = {
         sub: user.id,
-        currentUser: userDetal
+        // currentUser: userDetal
         
     };
     const options = {
@@ -33,7 +33,7 @@ function generateAuthorizationToken(user) {
 function getUserIdFromToken(token) {
     const payload = jwt.verify(token, SECRET_KEY);
     console.log(payload)
-    console.log( payload.currentUser.avatar.color)
+    // console.log( payload.currentUser.avatar.color)
     return payload.sub
 }
 
