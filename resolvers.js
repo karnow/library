@@ -372,6 +372,7 @@ const resolvers = {
   },
   
   CurrentUser: {
+    id,
     isAdmin: currentUser =>!!currentUser.isAdmin
   },
 
