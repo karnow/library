@@ -285,14 +285,24 @@ function createDataAccess(db, search, auth) {
   
     }
 ///search functions
+    
     function searchResources(searchQuery, resourceType) {
     return searchQuery.length > 0
       ? search.findResources(searchQuery, resourceType)
       : getAllResourcesByType(resourceType);
     }
 
-    const searchBooks = (searchQuery = "") =>
-        searchResources(searchQuery, "Book");
+    function getPageByLimitAndOffset(array, limit, offset) {
+        return array.slice(offset, offset + limit);
+    }
+
+    const searchBooks = (searchQuery = "", { limit, offset }) => {
+        const books = searchResources(searchQuery, "Book");
+        if (limit) {
+            return getPageByLimitAndOffset(books, limit, offset);
+        }
+        return books;
+    };
     
     const searchAuthors = (searchQuery = "") =>
     searchResources(searchQuery, "Author");

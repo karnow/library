@@ -56,8 +56,8 @@ const id = resource => toExternalId(resource.id, resource.resourceType);
 
 const resolvers = {
   Query: {
-    books: (rootValue, { searchQuery }, { dataAccess }) =>
-    dataAccess.searchBooks(searchQuery),
+    books: (rootValue, { searchQuery, limit, offset }, { dataAccess }) =>
+    dataAccess.searchBooks(searchQuery, {limit, offset}),
     authors:(rootValue,{ searchQuery } , { dataAccess}) => 
     dataAccess.searchAuthors(searchQuery),
     users: (rootValue, { searchQuery }, { dataAccess}) => 

@@ -7,7 +7,7 @@ schema {
    
 }
 type Query {
-    books(searchQuery: String! = ""): [Book!]!
+    books(searchQuery: String! = "", limit: Int, offset: Int = 0): [Book!]!
     authors(searchQuery: String! = ""): [Author!]!,
     users(searchQuery: String! = ""): [User!]!,
     book(id: ID!): Book,
