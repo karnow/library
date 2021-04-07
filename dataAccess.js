@@ -296,10 +296,17 @@ function createDataAccess(db, search, auth) {
         return array.slice(offset, offset + limit);
     }
 
-    const searchBooks = (searchQuery = "", { limit, offset }) => {
+    function getPageByNumberAndSize(array, pageNumber, pageSize) {
+        return array.slice((pageNumber - 1) * pageSize, pageNumber * pageSize);
+    }
+
+    const searchBooks = (searchQuery = "", { limit, offset, pageSize, pageNumber }) => {
         const books = searchResources(searchQuery, "Book");
         if (limit) {
             return getPageByLimitAndOffset(books, limit, offset);
+        }
+        if (pageSize) {
+            return getPageByNumberAndSize(books, pageNumber, pageSize);
         }
         return books;
     };
