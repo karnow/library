@@ -7,7 +7,7 @@ schema {
    
 }
 type Query {
-    books(searchQuery: String! = "", limit: Int, offset: Int = 0, pageSize: Int, pageNumber: Int = 1): [Book!]!
+    books(searchQuery: String! = "", limit: Int, offset: Int = 0, pageSize: Int, pageNumber: Int = 1): PaginatedBooks!
     authors(searchQuery: String! = ""): [Author!]!,
     users(searchQuery: String! = ""): [User!]!,
     book(id: ID!): Book,
@@ -214,6 +214,15 @@ type BookCopy implements Resource {
     owner: User!,
     book: Book!,
     borrower: User
+}
+type PageInfo {
+    currentPageNumber: Int!
+    nextPageNumber: Int
+    previousPageNumber: Int
+}
+type PaginatedBooks {
+    results: [Book!]!
+    pageInfo: PageInfo!
 }
 
 `;

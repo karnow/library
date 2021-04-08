@@ -299,7 +299,23 @@ function createDataAccess(db, search, auth) {
     function getPageByNumberAndSize(array, pageNumber, pageSize) {
         return array.slice((pageNumber - 1) * pageSize, pageNumber * pageSize);
     }
+    function getPageInfo(array, pageNumber, pageSize) {
+        const previousPageNumber = pageNumber > 1 ? pageNumber - 1 : null;
+        const nextPageNumber = pageNumber < Math.ceil(array.length / pageSize) ? pageNumber + 1 : null;
+        return {
+            currentPageNumber: pageNumber,
+            previousPageNumber,
+            nextPageNumber
+        };
+    }
 
+    function searchAndPaginateBooks(searchQuery = "", pageNumber, pageSize) {
+        const books = searchResources(searchQuery, "Book");
+        return {
+            results: getPageByNumberAndSize(books, pageNumber, pageSize),
+            pageInfo: getPageInfo(books, pageNumber, pageSize)
+        }
+    }
     const searchBooks = (searchQuery = "", { limit, offset, pageSize, pageNumber }) => {
         const books = searchResources(searchQuery, "Book");
         if (limit) {
@@ -343,6 +359,7 @@ function createDataAccess(db, search, auth) {
         updateBook,
         createBook,
         searchBooks,
+        searchAndPaginateBooks,
  
         getAllAuthors,
         getAuthorById,
@@ -378,6 +395,7 @@ function createDataAccess(db, search, auth) {
         getResourceByIdAndType,
         getAllResourcesByType,
         revertToInitialData
+        
  
     };
     return dataAccess;
