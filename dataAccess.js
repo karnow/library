@@ -291,11 +291,21 @@ function createDataAccess(db, search, auth) {
       ? search.findResources(searchQuery, resourceType)
       : getAllResourcesByType(resourceType);
     }
-
+    //limit Paging
     function getPageByLimitAndOffset(array, limit, offset) {
         return array.slice(offset, offset + limit);
     }
-
+    
+    function getLimitAndOffsetInfo(array, limit, offset) {
+        const previousPageOffset = offset - limit >= 0 ? offset - limit : null;
+        const nextPageOffset = offset < array.length-limit ? offset + limit : null;
+        return {
+            currentOffset: offset,
+            previousPageOffset,
+            nextPageOffset
+        };
+    }
+    //page Paging
     function getPageByNumberAndSize(array, pageNumber, pageSize) {
         return array.slice((pageNumber - 1) * pageSize, pageNumber * pageSize);
     }
@@ -309,13 +319,20 @@ function createDataAccess(db, search, auth) {
         };
     }
 
-    function searchAndPaginateBooks(searchQuery = "", pageNumber, pageSize) {
+    function searchAndPaginateBooks(searchQuery = "",limit, offset, pageNumber, pageSize ) {
         const books = searchResources(searchQuery, "Book");
-        return {
-            results: getPageByNumberAndSize(books, pageNumber, pageSize),
-            pageInfo: getPageInfo(books, pageNumber, pageSize)
+        if (limit) return {
+            results: getPageByLimitAndOffset(books, limit, offset),
+            pageInfo: getLimitAndOffsetInfo(books, limit, offset)
+        }
+        if (pageSize) {
+            return {
+                results: getPageByNumberAndSize(books, pageNumber, pageSize),
+                pageInfo: getPageInfo(books, pageNumber, pageSize)
+            }
         }
     }
+    //old
     const searchBooks = (searchQuery = "", { limit, offset, pageSize, pageNumber }) => {
         const books = searchResources(searchQuery, "Book");
         if (limit) {

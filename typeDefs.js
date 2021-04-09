@@ -219,6 +219,9 @@ type PageInfo {
     currentPageNumber: Int!
     nextPageNumber: Int
     previousPageNumber: Int
+    currentOffset: Int!
+    previousPageOffset: Int
+    nextPageOffset: Int
 }
 type PaginatedBooks {
     results: [Book!]!
