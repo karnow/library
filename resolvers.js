@@ -56,7 +56,9 @@ const id = resource => toExternalId(resource.id, resource.resourceType);
 
 const resolvers = {
   Query: {
-    books: (rootValue, { searchQuery, limit, offset, pageSize, pageNumber }, { dataAccess }) =>
+    books: (rootValue, { searchQuery,  limit, offset, pageSize, pageNumber  }, { dataAccess }) =>
+      dataAccess.searchBooks(searchQuery, { limit, offset, pageNumber, pageSize }),
+    paginatedBooks: (rootValue, { searchQuery, limit, offset, pageSize, pageNumber }, { dataAccess }) =>
     dataAccess.searchAndPaginateBooks(searchQuery,limit, offset, pageNumber, pageSize),
     authors:(rootValue,{ searchQuery } , { dataAccess}) => 
     dataAccess.searchAuthors(searchQuery),
