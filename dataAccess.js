@@ -310,12 +310,16 @@ function createDataAccess(db, search, auth) {
         return array.slice((pageNumber - 1) * pageSize, pageNumber * pageSize);
     }
     function getPageInfo(array, pageNumber, pageSize) {
-        const previousPageNumber = pageNumber > 1 ? pageNumber - 1 : null;
-        const nextPageNumber = pageNumber < Math.ceil(array.length / pageSize) ? pageNumber + 1 : null;
+        const firstNumberPage =1;
+        const lastPageNumber = Math.ceil(array.length / pageSize);
+        const previousPageNumber = pageNumber > firstNumberPage ? pageNumber - 1 : null;
+        const nextPageNumber = pageNumber < lastPageNumber ? pageNumber + 1 : null;
         return {
             currentPageNumber: pageNumber,
             previousPageNumber,
-            nextPageNumber
+            nextPageNumber,
+            firstNumberPage,
+            lastPageNumber
         };
     }
 
@@ -328,7 +332,7 @@ function createDataAccess(db, search, auth) {
         if (pageSize) {
             return {
                 results: getPageByNumberAndSize(books, pageNumber, pageSize),
-                pageInfo: getPageInfo(books, pageNumber, pageSize)
+                pageInfo: getPageInfo(books, pageNumber, pageSize),
             }
         }
     }
