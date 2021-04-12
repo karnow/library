@@ -8,7 +8,7 @@ schema {
 }
 type Query {
     books(searchQuery: String! = "", limit: Int, offset: Int = 0, pageSize: Int, pageNumber: Int = 1): PaginatedBooks!,
-    paginatedBooks(searchQuery: String! = "", limit: Int, offset: Int = 0, pageSize: Int, pageNumber: Int = 1): PaginatedBooks! @ deprecated(reason: "Switch to books Immediately"),
+    # paginatedBooks(searchQuery: String! = "", limit: Int, offset: Int = 0, pageSize: Int, pageNumber: Int = 1): PaginatedBooks! @ deprecated(reason: "Switch to books Immediately"),
     authors(searchQuery: String! = ""): [Author!]!,
     users(searchQuery: String! = ""): [User!]!,
     book(id: ID!): Book,

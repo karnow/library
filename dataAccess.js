@@ -323,7 +323,20 @@ function createDataAccess(db, search, auth) {
         };
     }
 
+    function validateParams(pageNumber, pageSize) {
+  if (!pageNumber) {
+    throw new Error("You need to define page number");
+  }
+  if (!pageSize) {
+    throw new Error("You need to define page size");
+  }
+  if (pageSize < 1) {
+    throw new Error("Page size has to be greater than 0");
+  }
+}
+
     function searchAndPaginateBooks(searchQuery = "",limit, offset, pageNumber, pageSize ) {
+        validateParams(pageNumber, pageSize);
         const books = searchResources(searchQuery, "Book");
         if (limit) return {
             results: getPageByLimitAndOffset(books, limit, offset),
